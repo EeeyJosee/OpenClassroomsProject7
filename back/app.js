@@ -12,16 +12,6 @@ dotenv;
 // start up express
 const app = express();
 
-// connect to Sequelize
-// mongoose.connect(`mongodb+srv://${mongoUsername}:${mongoPassword}@${mongoHost}`)
-//     .then(() => {
-//         console.log('Successfully connected to MongoDB Atlas!');
-//     })
-//     .catch((error) => {
-//         console.log('Unable to connect to MongoDB Atlas!');
-//         console.error(error);
-//     });
-
 // create API routes
 app.use(express.json());
 

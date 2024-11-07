@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const User = require('../models/category');
+const { User } = require('../models');
 
 // create a new user
 exports.signup = (request, response, next) => {

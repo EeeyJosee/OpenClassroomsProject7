@@ -6,11 +6,14 @@ const Sequelize = require('sequelize');
 const process = require('process');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/config.json')[env];
+const config = {};
 const db = {};
 const username = process.env.DB_USERNAME;
 const password = process.env.DB_PASSWORD;
 const database = process.env.DB_NAME;
+config.port = process.env.DB_PORT;
+config.host = process.env.DB_HOST;
+config.dialect = process.env.DB_DIALECT;
 
 let sequelize;
 if (config.use_env_variable) {
