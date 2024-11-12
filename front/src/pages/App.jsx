@@ -4,11 +4,19 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Home from './Home';
 import SignUp from './SignUp';
 import LogIn from './LogIn';
+import { Navigate, Outlet } from 'react-router-dom';
+
+const PrivateRoutes = () => {
+  // let auth = { token: true };
+  const auth = JSON.parse(localStorage.getItem('auth') || '{"token": false}');
+  return auth.token ? <Outlet /> : <Navigate to="/login" />;
+};
 
 function App() {
   return (
     <Router>
 
+      {/* not sure if keeping this */}
       <nav style={{ margin: 10 }}>
         <Link to="/" style={{ padding: 5 }}>
           Home
@@ -22,7 +30,9 @@ function App() {
       </nav>
 
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route element={<PrivateRoutes />}>
+          <Route path="/" element={<Home />} />
+        </Route>
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<LogIn />} />
       </Routes>
