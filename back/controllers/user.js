@@ -8,7 +8,9 @@ exports.signup = (request, response, next) => {
         (hash) => {
             const user = new User({
                 email: request.body.email,
-                password: hash
+                password: hash,
+                firstName: request.body.firstName,
+                lastName: request.body.lastName
             });
             user.save().then(
                 () => {
@@ -19,7 +21,7 @@ exports.signup = (request, response, next) => {
             ).catch(
                 (error) => {
                     response.status(500).json({
-                        error: 'User was not added!'
+                        error: 'User was not added! Email already exists!'
                     });
                 }
             );
