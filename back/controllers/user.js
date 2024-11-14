@@ -46,11 +46,11 @@ exports.login = (request, response, next) => {
                         });
                     }
                     const token = jwt.sign(
-                        { userId: user._id },
+                        { userId: user.id },
                         process.env.TOKEN_SECRET,
                         { expiresIn: '24h' });
                     response.status(200).json({
-                        userId: user._id,
+                        userId: user.id,
                         token: token
                     });
                 }

@@ -4,7 +4,7 @@ import '../styles/SignUp.css';
 function Home() {
     return (
         <>
-            {<Banner />}
+            <Banner />
             <div className="homepage-shoutout"> Woo Homepage! </div>
         </>
     );

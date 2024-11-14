@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import Banner from '../components/Banner';
 import '../styles/LogIn.css';
 
 function LogIn() {
@@ -20,6 +21,7 @@ function LogIn() {
 
     return (
         <>
+            <Banner />
             <div>
                 <form action="" id="login" method="post" onSubmit={handleSubmit}>
                     <h1>Login</h1>

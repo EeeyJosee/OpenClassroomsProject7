@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import Banner from '../components/Banner';
 import '../styles/SignUp.css';
 
 function SignUp() {
@@ -22,6 +23,7 @@ function SignUp() {
 
     return (
         <>
+            <Banner />
             <div>
                 <form action="" id="signup" method="post" onSubmit={handleSubmit}>
                     <h1>Signup</h1>
@@ -57,7 +59,7 @@ function SignUp() {
                     </p>
                     <p className="item">
                         <label htmlFor="lastName"> Last Name </label>
-                        <input 
+                        <input
                             type="lastName"
                             name="lastName"
                             id="lastName"
