@@ -1,0 +1,32 @@
+#login {
+    margin-top: 20px;
+    border-bottom: solid 5px rgb(140, 0, 0);
+    background-color: rgba(140, 0, 0, 0.183);
+    padding: 0px 15px 10px;
+}
+
+h1 {
+    padding: 10px 0px 0px;
+    font-size: 25px;
+}
+
+label {
+    font-weight: 600;
+}
+
+input {
+    padding: 2px 6px;
+    font-size: 16px;
+    background-color: white;
+    border-width: 1.5px;
+}
+
+@media (max-width: 366px) {
+
+    input#email,
+    input#password,
+    input#firstName,
+    input#lastName {
+        width: 150px;
+    }
+}
