@@ -6,9 +6,9 @@ function Banner() {
     return (
         <>
             <nav>
-                <Link to="/">Home</Link>
                 <Link to="/signup">SignUp</Link>
                 <Link to="/login">LogIn</Link>
+                <Link to="/">Home</Link>
             </nav>
             <div className="imj-Banner">
                 <img src={logo} alt='Jungle House' className='jh-logo' />
@@ -16,5 +16,6 @@ function Banner() {
         </>
     )
 }
+
 export default Banner
 
