@@ -1,16 +1,9 @@
-// import logo from '../assets/logo.svg';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import PrivateRoutes from '../components/PrivateRoutes';
 import '../styles/App.css';
 import Home from './Home';
 import LogIn from './LogIn';
 import SignUp from './SignUp';
-import PrivateRoutes from '../components/PrivateRoutes';
-
-// const PrivateRoutes = () => {
-//   let auth = { token: true };
-//   // const auth = JSON.parse(localStorage.getItem('auth') || '{"token": false}');
-//   return auth.token ? <Outlet /> : <Navigate to="/login" />;
-// };
 
 function App() {
   return (

@@ -1,9 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv').config();
-const path = require('path');
 
 const userRoutes = require('./routes/user');
-// const sauceRoutes = require('./routes/sauce');
 
 // grab DB details from .env file
 dotenv;

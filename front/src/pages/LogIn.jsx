@@ -1,21 +1,23 @@
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Banner from '../components/Banner';
 import '../styles/LogIn.css';
 
 function LogIn() {
-
+    
+    const navigate = useNavigate();
     const handleSubmit = e => {
         // Prevent the default submit and page reload
         e.preventDefault();
-        // Handle validations
         axios
             .post("http://localhost:3000/api/auth/login", { email, password })
             .then(response => {
-                console.log(response);
-                // Handle response
+                localStorage.setItem("auth", JSON.stringify(response.data));
+                navigate('..');
             });
     }
+
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
 

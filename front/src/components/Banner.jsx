@@ -3,12 +3,18 @@ import logo from '../assets/icon-left-font.png';
 import '../styles/Banner.css';
 
 function Banner() {
+    const auth = JSON.parse(localStorage.getItem('auth') || '{"token": false}');
+    const handleClick = () => {
+        localStorage.clear();
+    }
+
     return (
         <>
             <nav>
-                <Link to="/signup">SignUp</Link>
-                <Link to="/login">LogIn</Link>
-                <Link to="/">Home</Link>
+                {!auth.token && <Link to="/signup">SignUp</Link>}
+                {!auth.token && <Link to="/login">LogIn</Link>}
+                {auth.token && <Link to="/">Home</Link>}
+                {auth.token && <Link to="/login" onClick={handleClick}>Sign Out</Link>}
             </nav>
             <div className="imj-Banner">
                 <img src={logo} alt='Jungle House' className='jh-logo' />
@@ -18,4 +24,3 @@ function Banner() {
 }
 
 export default Banner
-

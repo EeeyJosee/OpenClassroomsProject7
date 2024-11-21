@@ -2,6 +2,7 @@ import Banner from '../components/Banner';
 import '../styles/SignUp.css';
 
 function Home() {
+
     return (
         <>
             <Banner />
