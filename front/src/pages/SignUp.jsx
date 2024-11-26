@@ -1,27 +1,66 @@
 import axios from "axios";
-import { useState } from "react";
+import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import Banner from '../components/Banner';
 import '../styles/SignUp.css';
 
 function SignUp() {
 
-    const navigate = useNavigate();
     const handleSubmit = e => {
         // Prevent the default submit and page reload
         e.preventDefault();
-        axios
-            .post("http://localhost:3000/api/auth/signup", { email, password, firstName, lastName })
-            .then(response => {
-                console.log(JSON.parse(response.config.data).email);
-                console.log(JSON.parse(response.config.data).password);
-                navigate('/login');
-            });
+
+        if (reEmail.test(email)
+            && rePassword.test(password)
+            && (reName.test(firstName) || firstName === '')
+            && (reName.test(lastName) || lastName === '')) {
+
+            setErrorMessage('');
+            axios
+                .post("http://localhost:3000/api/auth/signup", { email, password, firstName, lastName })
+                .then(
+                    response => {
+                        setErrorMessage("✅ Account created! Now redirecting...");
+                        setTimeout(() => { navigate('/login') }, 3000);
+                    }
+                ).catch(
+                    (error) => {
+                        console.log(error.response.data)
+                        setErrorMessage(`❌ ${error.response.data.error}`);
+                        setTimeout(() => { setErrorMessage('') }, 4000);
+                    }
+                );
+
+        } else {
+            if (!reEmail.test(email)) {
+                setErrorMessage('❌ Email is invalid!');
+                setTimeout(() => { setErrorMessage('') }, 3000);
+            }
+            if (!rePassword.test(password)) {
+                setErrorMessage('❌ Password is invalid!');
+                setTimeout(() => { setErrorMessage('') }, 3000);
+            }
+            if (! (reName.test(firstName)|| firstName === '') ) {
+                setErrorMessage('❌ First name is invalid!');
+                setTimeout(() => { setErrorMessage('') }, 3000);
+            }
+            if (! (reName.test(lastName)|| lastName === '') ) {
+                setErrorMessage('❌ Last name is invalid!');
+                setTimeout(() => { setErrorMessage('') }, 3000);
+            }
+        }
     }
-    const [email, setEmail] = useState();
-    const [password, setPassword] = useState();
-    const [firstName, setFirstName] = useState();
-    const [lastName, setLastName] = useState();
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [errorMessage, setErrorMessage] = React.useState('');
+
+    const navigate = useNavigate();
+    const reEmail = new RegExp(/([a-zA-Z0-9]+@[a-zA-Z]+\.[a-zA-Z]{2,3})/);
+    const rePassword = new RegExp(/([a-zA-Z0-9])/);
+    const reName = new RegExp(/[a-zA-Z-]/);
 
     return (
         <>
@@ -30,7 +69,7 @@ function SignUp() {
                 <form action="" id="signup" method="post" onSubmit={handleSubmit}>
                     <h1>Signup</h1>
                     <p className="item">
-                        <label htmlFor="email"> Email </label>
+                        <label htmlFor="email"> Email <span>*</span> </label>
                         <input
                             type="email"
                             name="email"
@@ -40,7 +79,7 @@ function SignUp() {
                         />
                     </p>
                     <p className="item">
-                        <label htmlFor="password"> Password </label>
+                        <label htmlFor="password"> Password <span>*</span> </label>
                         <input
                             type="password"
                             name="password"
@@ -69,9 +108,12 @@ function SignUp() {
                             onChange={e => setLastName(e.target.value)}
                         />
                     </p>
-                    <p className="item">
-                        <input type="submit" value="Signup" />
-                    </p>
+                    <div className="submitError">
+                        <p className="item">
+                            <input type="submit" value="Signup" />
+                        </p>
+                        {errorMessage && <div className="error"> {errorMessage} </div>}
+                    </div>
                 </form>
             </div>
         </>

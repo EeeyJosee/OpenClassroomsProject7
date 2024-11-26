@@ -20,7 +20,7 @@ exports.signup = (request, response, next) => {
                 }
             ).catch(
                 (error) => {
-                    response.status(500).json({
+                    response.status(400).json({
                         error: 'User was not added! Email already exists!'
                     });
                 }
@@ -31,7 +31,8 @@ exports.signup = (request, response, next) => {
 
 // log into the website
 exports.login = (request, response, next) => {
-    User.findOne({ email: request.body.email }).then(
+    // const project = await Project.findOne({ where: { title: 'My Title' } });
+    User.findOne({ where: { email: request.body.email }}).then(
         (user) => {
             if (!user) {
                 return response.status(401).json({
