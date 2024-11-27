@@ -14,10 +14,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Post.init({
+    id: { type: DataTypes.INTEGER, primaryKey: true },
     message: DataTypes.STRING,
     mediaUrl: DataTypes.STRING,
-    title: { type: DataTypes.STRING, unique: true },
-    read: DataTypes.STRING
+    title: { type: DataTypes.STRING, unique: true }, 
+    read: { type: [DataTypes.INTEGER] }
   }, {
     sequelize,
     modelName: 'Post',

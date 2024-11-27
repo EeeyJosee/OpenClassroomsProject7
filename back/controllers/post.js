@@ -1,225 +1,117 @@
-const Sauce = require('../models/sauce');
+const Post = require('../models/post');
 const fs = require('fs');
 
-// display all sauces
-exports.getAllSauces = (request, response, next) => {
-    Sauce.find().then(
-        (sauces) => {
-            response.status(200).json(sauces);
+// display all posts
+exports.getAllPosts = (request, response, next) => {
+    Post.find().then(
+        (posts) => {
+            response.status(200).json(posts);
         }
     ).catch(
         (error) => {
             response.status(400).json({
-                error: 'Sauces were not found!'
+                error: 'Posts were not found!'
             });
         }
     );
 };
 
-// return a single sauce
-exports.getOneSauce = (request, response, next) => {
-    Sauce.findOne({
+// return a single post
+exports.getOnePost = (request, response, next) => {
+    Post.findOne({
         _id: request.params.id
     }).then(
-        (sauce) => {
-            response.status(200).json(sauce);
+        (post) => {
+            response.status(200).json(post);
         }
     ).catch(
         (error) => {
             response.status(400).json({
-                error: 'Sauce was not found!'
+                error: 'Post was not found!'
             });
         }
     );
 };
 
-// create a new sauce with image
-exports.createSauce = (request, response, next) => {
-    request.body = JSON.parse(request.body.sauce);
+// create a new post with media
+exports.createPost = (request, response, next) => {
+    request.body = JSON.parse(request.body.post);
     const url = request.protocol + '://' + request.get('host');
-    const sauce = new Sauce({
-        userId: request.body.userId,
-        name: request.body.name,
-        manufacturer: request.body.manufacturer,
-        description: request.body.description,
-        mainPepper: request.body.mainPepper,
-        heat: request.body.heat,
-        imageUrl: url + '/images/' + request.file.filename,
-        likes: 0,
-        dislikes: 0,
-        usersLiked: [],
-        usersDisliked: [],
+    const post = new Post({
+        id: request.body.id,
+        message: request.body.message,
+        mediaUrl: url + '/media/' + request.file.filename,
+        title: request.body.title,
+        read: []
     });
-    sauce.save().then(
+    post.save().then(
         () => {
             response.status(201).json({
-                message: 'New sauce created!'
+                message: 'New post created!'
             });
         }
     ).catch(
         (error) => {
             response.status(400).json({
-                error: 'Sauce was not created!'
+                error: 'Post was not created!'
             });
         }
     );
 };
 
-// like or dislike made sauces
-exports.likeSauce = (request, response, next) => {
-    user = request.body.userId;
-    like = request.body.like;
-
-    Sauce.findOne({ _id: request.params.id }).then(
-        (sauce) => {
-            if (!sauce) {
+// modify contents of existing post
+exports.modifyPost = (request, response, next) => {
+    Post.findOne({ _id: request.params.id }).then(
+        (post) => {
+            if (!post) {
                 return response.status(404).json({
-                    error: 'Sauce not found!'
-                });
-            }
-            // check who liked sauces
-            usersLiked = sauce.usersLiked;
-            usersDisliked = sauce.usersDisliked;
-            switch (like) {
-                // like the sauce
-                case 1:
-                    if (usersLiked.includes(user)) {
-                        return response.status(401).json({
-                            error: 'Sauce has already been liked!'
-                        });
-                    }
-                    if (!usersLiked.includes(user)) {
-                        usersLiked.push(user);
-                        usersDisliked.remove(user);
-                        sauce.save().then(
-                            () => {
-                                response.status(201).json({
-                                    message: 'Sauce has been liked!'
-                                });
-                            }
-                        ).catch(
-                            (error) => {
-                                response.status(400).json({
-                                    error: 'Sauce could not be liked!'
-                                });
-                            }
-                        );
-                    };
-                    break;
-                // dislike the sauce
-                case -1:
-                    if (usersDisliked.includes(user)) {
-                        return response.status(401).json({
-                            error: 'Sauce has already been disliked!'
-                        });
-                    }
-                    if (!usersDisliked.includes(user)) {
-                        usersDisliked.push(user);
-                        usersLiked.remove(user);
-                        sauce.save().then(
-                            () => {
-                                response.status(201).json({
-                                    message: 'Sauce has been disliked!'
-                                });
-                            }
-                        ).catch(
-                            (error) => {
-                                response.status(400).json({
-                                    error: 'Sauce could not be disliked!'
-                                });
-                            }
-                        );
-                    };
-                    break;
-                // remove (dis)like from the sauce
-                case 0:
-                    usersLiked.remove(user);
-                    usersDisliked.remove(user);
-                    sauce.save().then(
-                        () => {
-                            response.status(201).json({
-                                message: 'Like has been reset!'
-                            });
-                        }
-                    ).catch(
-                        (error) => {
-                            response.status(400).json({
-                                error: 'Like could not be reset!'
-                            });
-                        }
-                    );
-                    break;
-                default:
-                    return response.status(401).json({
-                        error: 'Like is not of the values -1, 0, or 1!'
-                    });
-            }
-            // add up total number of likes & dislikes
-            sauce.likes = usersLiked.length;
-            sauce.dislikes = usersDisliked.length;
-        }
-    )
-};
-
-// modify contents of existing sauce
-exports.modifySauce = (request, response, next) => {
-    Sauce.findOne({ _id: request.params.id }).then(
-        (sauce) => {
-            if (!sauce) {
-                return response.status(404).json({
-                    error: 'Sauce not found!'
+                    error: 'Post not found!'
                 });
             }
 
-            // parse images before validating user
+            // parse media before validating user
             if (request.file) {
-                request.body = JSON.parse(request.body.sauce);
+                request.body = JSON.parse(request.body.post);
             }
 
             // verify user authorization
-            if (!((sauce.userId == request.auth.userId) && (sauce.userId == request.body.userId))) {
+            if (!((post.userId == request.auth.userId) && (post.userId == request.body.userId))) {
                 return response.status(401).json({
                     error: 'Request not authorized!'
                 });
             }
             else {
                 if (request.file) {
-                    const filename = sauce.imageUrl.split('/images/')[1];
-                    fs.unlink('images/' + filename, () => {})
+                    const filename = post.mediaUrl.split('/media/')[1];
+                    fs.unlink('media/' + filename, () => {})
                         const url = request.protocol + '://' + request.get('host');
-                        sauce = {
-                            _id: request.params.id,
-                            name: request.body.name,
-                            manufacturer: request.body.manufacturer,
-                            description: request.body.description,
-                            mainPepper: request.body.mainPepper,
-                            heat: request.body.heat,
-                            imageUrl: url + '/images/' + request.file.filename,
-                            userId: request.body.userId
+                        post = {
+                            id: request.params.id,
+                            message: request.body.message,
+                            title: request.body.title,
+                            mediaUrl: url + '/media/' + request.file.filename,
+                            userId: request.body.id
                         };
-                    
+                        
                 } else {
-                    sauce = {
-                        _id: request.params.id,
-                        name: request.body.name,
-                        manufacturer: request.body.manufacturer,
-                        description: request.body.description,
-                        mainPepper: request.body.mainPepper,
-                        heat: request.body.heat,
-                        imageUrl: request.body.imageUrl,
-                        userId: request.body.userId
+                    post = {
+                        id: request.params.id,
+                        message: request.body.message,
+                        title: request.body.title,
+                        mediaUrl: request.body.mediaUrl,
+                        userId: request.body.id
                     };
                 }
-                Sauce.updateOne({ _id: request.params.id }, sauce).then(
+                Post.updateOne({ _id: request.params.id }, post).then(
                     () => {
                         response.status(201).json({
-                            message: 'Sauce has been updated!'
+                            message: 'Post has been updated!'
                         });
                     }
                 ).catch(
                     (error) => {
                         response.status(400).json({
-                            error: 'Sauce was not updated!'
+                            error: 'Post was not updated!'
                         });
                     }
                 );
@@ -228,23 +120,23 @@ exports.modifySauce = (request, response, next) => {
     )
 };
 
-// delete an existing sauce
-exports.deleteSauce = (request, response, next) => {
-    Sauce.findOne({ _id: request.params.id }).then(
-        (sauce) => {
-            if (!sauce) {
+// delete an existing post
+exports.deletePost = (request, response, next) => {
+    Post.findOne({ _id: request.params.id }).then(
+        (post) => {
+            if (!post) {
                 return response.status(404).json({
-                    error: 'Sauce not found!'
+                    error: 'Post not found!'
                 });
             }
-            if (sauce.userId !== request.auth.userId) {
+            if (post.userId !== request.auth.userId) {
                 return response.status(401).json({
                     error: 'Request not authorized!'
                 });
             }
-            const filename = sauce.imageUrl.split('/images/')[1];
-            fs.unlink('images/' + filename, () => {
-                Sauce.deleteOne({ _id: request.params.id }).then(
+            const filename = post.mediaUrl.split('/media/')[1];
+            fs.unlink('media/' + filename, () => {
+                Post.deleteOne({ _id: request.params.id }).then(
                     () => {
                         response.status(200).json({
                             message: 'Deleted!'
@@ -253,7 +145,7 @@ exports.deleteSauce = (request, response, next) => {
                 ).catch(
                     (error) => {
                         response.status(400).json({
-                            error: 'Sauce could not be deleted!'
+                            error: 'Post could not be deleted!'
                         });
                     }
                 );

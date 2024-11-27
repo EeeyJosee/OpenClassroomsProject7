@@ -1,7 +1,8 @@
 const express = require('express');
 const dotenv = require('dotenv').config();
-
+const postRoutes = require('./routes/post');
 const userRoutes = require('./routes/user');
+const path = require('path');
 
 // grab DB details from .env file
 dotenv;
@@ -20,10 +21,10 @@ app.use((request, response, next) => {
 });
 
 // allows images to be uploaded
-// app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 // login and signup
 app.use('/api/auth', userRoutes);
-// sauce route
-// app.use('/api/sauces', sauceRoutes);
+// post route
+app.use('/api/post', postRoutes);
 
 module.exports = app;
