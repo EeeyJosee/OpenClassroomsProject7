@@ -1,4 +1,4 @@
-const Post = require('../models/post');
+const { Post } = require('../models');
 const fs = require('fs');
 
 // display all posts
@@ -38,7 +38,6 @@ exports.createPost = (request, response, next) => {
     request.body = JSON.parse(request.body.post);
     const url = request.protocol + '://' + request.get('host');
     const post = new Post({
-        id: request.body.id,
         message: request.body.message,
         mediaUrl: url + '/media/' + request.file.filename,
         title: request.body.title,

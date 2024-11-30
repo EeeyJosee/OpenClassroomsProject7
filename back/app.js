@@ -21,10 +21,10 @@ app.use((request, response, next) => {
 });
 
 // allows images to be uploaded
-app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/media', express.static(path.join(__dirname, 'media')));
 // login and signup
 app.use('/api/auth', userRoutes);
 // post route
-app.use('/api/post', postRoutes);
+app.use('/api/posts', postRoutes);
 
 module.exports = app;
