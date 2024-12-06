@@ -1,0 +1,24 @@
+.postContainer {
+    background-color: #FCD7D4;
+    /* justify-items: center; */
+    /* display: flex;
+    flex-direction: column; */
+}
+
+ul {
+    justify-items: center;
+    padding: 0px;
+}
+
+li {
+    background-color: white;
+    list-style-type: none;
+    justify-items: center;
+    width: 90%;
+    border-radius: 5px;
+}
+
+.postMedia {
+    background-color: yellow;
+    width: 100%;
+}
