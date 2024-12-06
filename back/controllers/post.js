@@ -3,7 +3,7 @@ const fs = require('fs');
 
 // display all posts
 exports.getAllPosts = (request, response, next) => {
-    Post.find().then(
+    Post.findAll().then(
         (posts) => {
             response.status(200).json(posts);
         }
@@ -18,9 +18,7 @@ exports.getAllPosts = (request, response, next) => {
 
 // return a single post
 exports.getOnePost = (request, response, next) => {
-    Post.findOne({
-        _id: request.params.id
-    }).then(
+    Post.findOne({ where: {id: request.params.id }}).then(
         (post) => {
             response.status(200).json(post);
         }
@@ -33,29 +31,54 @@ exports.getOnePost = (request, response, next) => {
     );
 };
 
-// create a new post with media
+// create a new post with or without media
 exports.createPost = (request, response, next) => {
-    request.body = JSON.parse(request.body.post);
-    const url = request.protocol + '://' + request.get('host');
-    const post = new Post({
-        message: request.body.message,
-        mediaUrl: url + '/media/' + request.file.filename,
-        title: request.body.title,
-        read: []
-    });
-    post.save().then(
-        () => {
-            response.status(201).json({
-                message: 'New post created!'
-            });
-        }
-    ).catch(
-        (error) => {
-            response.status(400).json({
-                error: 'Post was not created!'
-            });
-        }
-    );
+    // post created with multimedia
+    if (request.file) {
+        request.body = JSON.parse(request.body.post);
+
+        const url = request.protocol + '://' + request.get('host');
+        const post = new Post({
+            message: request.body.message,
+            mediaUrl: url + '/media/' + request.file.filename,
+            title: request.body.title,
+            read: []
+        });
+        post.save().then(
+            () => {
+                response.status(201).json({
+                    message: 'New post created!'
+                });
+            }
+        ).catch(
+            (error) => {
+                response.status(400).json({
+                    error: 'Post was not created!'
+                });
+            }
+        );
+    }
+    // post created without multimedia
+    else {
+        const post = new Post({
+            message: request.body.message,
+            title: request.body.title,
+            read: []
+        });
+        post.save().then(
+            () => {
+                response.status(201).json({
+                    message: 'New post created!'
+                });
+            }
+        ).catch(
+            (error) => {
+                response.status(400).json({
+                    error: 'Post was not created! Title is not unique.'
+                });
+            }
+        );
+    }
 };
 
 // modify contents of existing post
@@ -82,16 +105,16 @@ exports.modifyPost = (request, response, next) => {
             else {
                 if (request.file) {
                     const filename = post.mediaUrl.split('/media/')[1];
-                    fs.unlink('media/' + filename, () => {})
-                        const url = request.protocol + '://' + request.get('host');
-                        post = {
-                            id: request.params.id,
-                            message: request.body.message,
-                            title: request.body.title,
-                            mediaUrl: url + '/media/' + request.file.filename,
-                            userId: request.body.id
-                        };
-                        
+                    fs.unlink('media/' + filename, () => { })
+                    const url = request.protocol + '://' + request.get('host');
+                    post = {
+                        id: request.params.id,
+                        message: request.body.message,
+                        title: request.body.title,
+                        mediaUrl: url + '/media/' + request.file.filename,
+                        userId: request.body.id
+                    };
+
                 } else {
                     post = {
                         id: request.params.id,

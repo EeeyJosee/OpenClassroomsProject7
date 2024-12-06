@@ -9,6 +9,8 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
+
+    //TODO can add UserID specifically through Sequelize association (won't have to add the field)
     static associate(models) {
       // define association here
     }
@@ -16,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
   Post.init({
     message: DataTypes.STRING,
     mediaUrl: DataTypes.STRING,
-    title: { type: DataTypes.STRING, unique: true }, 
+    title: { type: DataTypes.STRING }, 
     read: DataTypes.ARRAY(DataTypes.INTEGER)
   }, {
     sequelize,

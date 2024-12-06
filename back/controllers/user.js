@@ -31,7 +31,6 @@ exports.signup = (request, response, next) => {
 
 // log into the website
 exports.login = (request, response, next) => {
-    // const project = await Project.findOne({ where: { title: 'My Title' } });
     User.findOne({ where: { email: request.body.email }}).then(
         (user) => {
             if (!user) {
