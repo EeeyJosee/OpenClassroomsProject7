@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect } from 'react';
 import Banner from '../components/Banner';
 import PostDashboard from '../components/PostDashboard';
+import NewPost from '../components/NewPost';
 
 function Home() {
 
@@ -31,8 +32,8 @@ function Home() {
     return (
         <>
             <Banner />
+            <NewPost />
             <PostDashboard />
-
         </>
     );
 }

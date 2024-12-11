@@ -9,8 +9,10 @@ function LogIn() {
     const handleSubmit = e => {
         // Prevent the default submit and page reload
         e.preventDefault();
+        
         if (reEmail.test(email) && rePassword.test(password)) {
             setErrorMessage('');
+
             axios
                 .post("http://localhost:3000/api/auth/login", { email, password })
                 .then(

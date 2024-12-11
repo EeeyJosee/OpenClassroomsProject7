@@ -41,47 +41,25 @@ function PostDashboard() {
         }
     ]
 
-    // verifying media contents for conditional rendering
-    for (const eachPost of posts) {
-        if (eachPost.mediaUrl) {
-            eachPost.hasMedia = true;
-
-            if (eachPost.mediaUrl.includes('.png')) {
-                eachPost.hasImg = true;
-                posts[eachPost] = eachPost;
-            }
-            else {
-                eachPost.hasImg = false;
-                posts[eachPost] = eachPost;
-            }
-        }
-        else {
-            eachPost.hasMedia = false;
-            eachPost.hasImg = false;
-            posts[eachPost] = eachPost;
-        }
-    }
-
-    // format mapping for each post
-    const post = ({ id, message, mediaUrl, title, hasMedia, hasImg }) =>
+    const post = ({ id, message, mediaUrl, title }) =>
+        // render appropriate media formats in list
         <li key={id}>
-            <h2>{title}</h2>
+            <h2 className='postTitle'>{title}</h2>
+            <p className="postMessage">{message}</p>
 
-            {/* render appropriate media formats in list */}
-            {hasMedia ?
-                <>
-                    {/* what type of media is present */}
-                    {hasImg ?
-                        <img className="postMedia" alt={`media for ${title}`} src={mediaUrl} />
-                        :
-                        <video className="postMedia" controls>
-                            <source src={mediaUrl} type="video/mp4"></source>
-                        </video>
-                    }
-                </> : null
-            }
+            {mediaUrl.includes('.png', '.jpg    ') ?
+                <img className="postMedia" src={mediaUrl} alt={`media for ${title}`} /> : null}
 
-            < p className="">{message}</p>
+            {mediaUrl.includes('.mp4') ?
+                <video className="postMedia" controls>
+                    <source src={mediaUrl} type="video/mp4"></source>
+                </video> : null}
+
+            {mediaUrl.includes('.mp3') ?
+                <audio className="postMedia" controls>
+                    <source src={mediaUrl} type="audio/ogg"></source>
+                    <source src={mediaUrl} type="audio/mpeg"></source>
+                </audio > : null}
         </li >
 
     return (

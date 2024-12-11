@@ -1,8 +1,11 @@
 .postContainer {
     background-color: #FCD7D4;
-    /* justify-items: center; */
-    /* display: flex;
-    flex-direction: column; */
+    display: flex;
+    flex-direction: column;
+}
+
+h1 {
+    margin: 0px 20px;
 }
 
 ul {
@@ -13,12 +16,24 @@ ul {
 li {
     background-color: white;
     list-style-type: none;
-    justify-items: center;
     width: 90%;
-    border-radius: 5px;
-}
+    border-radius: 15px;
+    margin: 40px auto;
+    padding: 10px 0px;
+    outline: 3.5px outset;
 
-.postMedia {
-    background-color: yellow;
-    width: 100%;
+    .postTitle {
+        width: 90%;
+        margin: 10px auto;
+    }
+
+    .postMessage {
+        width: 90%;
+        margin: 10px auto 15px;
+    }
+
+    .postMedia {
+        width: 50%;
+        margin: 0px auto 0px 25%;
+    }
 }
