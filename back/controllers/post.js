@@ -74,7 +74,7 @@ exports.createPost = (request, response, next) => {
         ).catch(
             (error) => {
                 response.status(400).json({
-                    error: 'Post was not created! Title is not unique.'
+                    error: 'Post was not created!'
                 });
             }
         );

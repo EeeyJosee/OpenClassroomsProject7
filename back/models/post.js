@@ -13,12 +13,13 @@ module.exports = (sequelize, DataTypes) => {
     //TODO can add UserID specifically through Sequelize association (won't have to add the field)
     static associate(models) {
       // define association here
+      this.belongsTo(models.User);
     }
   }
   Post.init({
     message: DataTypes.STRING,
     mediaUrl: DataTypes.STRING,
-    title: { type: DataTypes.STRING }, 
+    title: DataTypes.STRING,
     read: DataTypes.ARRAY(DataTypes.INTEGER)
   }, {
     sequelize,
