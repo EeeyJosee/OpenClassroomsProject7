@@ -46,7 +46,7 @@ function LogIn() {
             <Banner />
             <div>
                 <form action="" id="login" method="post" onSubmit={handleSubmit}>
-                    <h1>Login</h1>
+                    <h1 className="loginTitle">Login</h1>
                     <p className="item">
                         <label htmlFor="email"> Email </label>
                         <input
@@ -69,7 +69,7 @@ function LogIn() {
                     </p>
                     <div className="submitError">
                         <p className="item">
-                            <input type="submit" value="Login" />
+                            <input type="submit" id="loginButton" value="Login" />
                         </p>
                         {errorMessage && <div className="error"> {errorMessage} </div>}
                     </div>

@@ -67,7 +67,7 @@ function SignUp() {
             <Banner />
             <div>
                 <form action="" id="signup" method="post" onSubmit={handleSubmit}>
-                    <h1>Signup</h1>
+                    <h1 className="signupTitle">Signup</h1>
                     <p className="item">
                         <label htmlFor="email"> Email <span>*</span> </label>
                         <input
@@ -110,7 +110,7 @@ function SignUp() {
                     </p>
                     <div className="submitError">
                         <p className="item">
-                            <input type="submit" value="Signup" />
+                            <input type="submit" id="signupButton" value="Signup" />
                         </p>
                         {errorMessage && <div className="error"> {errorMessage} </div>}
                     </div>

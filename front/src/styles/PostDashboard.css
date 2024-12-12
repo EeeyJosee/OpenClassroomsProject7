@@ -4,7 +4,7 @@
     flex-direction: column;
 }
 
-h1 {
+.dashboardTitle {
     margin: 0px 20px;
 }
 
@@ -25,6 +25,7 @@ li {
     .postTitle {
         width: 90%;
         margin: 10px auto;
+        font-size: 22px;
     }
 
     .postMessage {
@@ -33,7 +34,8 @@ li {
     }
 
     .postMedia {
-        width: 50%;
-        margin: 0px auto 0px 25%;
+        width: 60%;
+        margin: 0px auto 0px 20%;
+        border-radius: 5px;
     }
 }

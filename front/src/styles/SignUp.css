@@ -1,12 +1,14 @@
 #signup {
-    margin-top: 20px;
+    margin: 20px 0px;
     border-bottom: solid 5px #FF2F01;
     background-color: #FCD7D4;
     padding: 0px 15px 10px;
 }
 
-h1 {
+.signupTitle {
     padding: 10px 0px 0px;
+    font-size: 25px;
+    margin: 0px
 }
 
 label {
@@ -18,6 +20,17 @@ label {
     justify-content: space-between;
     margin-top: -15px;
     align-items: center;
+}
+
+#signupButton {
+    background-color: white;
+    padding: 3px 6px;
+    border-radius: 3px;
+    font-size: 17px;
+}
+
+#signupButton:hover {
+    background-color: #EFEFEF;
 }
 
 span {

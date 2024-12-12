@@ -44,10 +44,10 @@ function PostDashboard() {
     const post = ({ id, message, mediaUrl, title }) =>
         // render appropriate media formats in list
         <li key={id}>
-            <h2 className='postTitle'>{title}</h2>
+            <h2 className="postTitle">{title}</h2>
             <p className="postMessage">{message}</p>
 
-            {mediaUrl.includes('.png', '.jpg    ') ?
+            {mediaUrl.includes('.png', '.jpg') ?
                 <img className="postMedia" src={mediaUrl} alt={`media for ${title}`} /> : null}
 
             {mediaUrl.includes('.mp4') ?
@@ -65,7 +65,7 @@ function PostDashboard() {
     return (
         <>
             <div className="postContainer">
-                <h1>Employee Dashboard</h1>
+                <h1 className="dashboardTitle">Employee Dashboard</h1>
                 <ul>
                     {posts.map(post)}
                 </ul>
