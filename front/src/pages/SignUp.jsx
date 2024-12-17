@@ -21,7 +21,7 @@ function SignUp() {
                 .then(
                     response => {
                         setErrorMessage("✅ Account created! Now redirecting...");
-                        setTimeout(() => { navigate('/login') }, 3000);
+                        setTimeout(() => { navigate('/login') }, 2000);
                     }
                 ).catch(
                     (error) => {

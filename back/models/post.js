@@ -10,7 +10,6 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
 
-    //TODO can add UserID specifically through Sequelize association (won't have to add the field)
     static associate(models) {
       // define association here
       this.belongsTo(models.User);

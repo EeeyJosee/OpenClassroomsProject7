@@ -4,23 +4,32 @@ import '../styles/NewPost.css';
 
 function NewPost() {
 
-    const submitForm = () => {
+    const submitForm = (e) => {
         // Prevent the default submit and page reload
-        submitForm.preventDefault();
+        e.preventDefault();
         const formData = new FormData();
+
         formData.append('post', { 'message': setMessage, 'title': setTitle });
         formData.append('media', setSelectedMedia);
 
+        console.log(formData.entries())
+
         axios
-            .post("http://localhost:3000/api/posts", formData)
+            .post("http://localhost:3000/api/posts", formData, config)
             .then(
                 (response) => {
-                    alert("File Upload success");
+                    alert("New Post Created!");
                 }
             ).catch(
                 (error) => {
-                    alert("File Upload Error");
+                    alert("Post was not created!");
                 });
+    };
+
+    // authentication details for get request
+    const auth = JSON.parse(localStorage.getItem('auth')).token;
+    const config = {
+        headers: { Authorization: `Bearer ${auth}` }
     };
 
     const [title, setTitle] = useState('');
@@ -48,7 +57,7 @@ function NewPost() {
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                         />
-                        <label htmlFor="messgae"> Message <span>*</span> </label>
+                        <label htmlFor="message"> Message <span>*</span> </label>
                         <textarea
                             type="message"
                             name="message"

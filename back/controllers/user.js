@@ -31,7 +31,7 @@ exports.signup = (request, response, next) => {
 
 // log into the website
 exports.login = (request, response, next) => {
-    User.findOne({ where: { email: request.body.email }}).then(
+    User.findOne({ where: { email: request.body.email } }).then(
         (user) => {
             if (!user) {
                 return response.status(401).json({
@@ -67,6 +67,37 @@ exports.login = (request, response, next) => {
             response.status(500).json({
                 error: 'User not found!'
             });
+        }
+    );
+};
+
+// delete an existing user
+exports.deleteUser = (request, response, next) => {
+    User.findOne({ where: { id: request.params.id } }).then(
+        (user) => {
+            if (!user) {
+                return response.status(404).json({
+                    error: 'User not found!'
+                });
+            }
+            if (user.id !== request.auth.userId) {
+                return response.status(401).json({
+                    error: 'Request not authorized!'
+                });
+            }
+            User.destroy({ where: { id: request.params.id } }).then(
+                () => {
+                    response.status(200).json({
+                        message: 'Deleted!'
+                    });
+                }
+            ).catch(
+                (error) => {
+                    response.status(400).json({
+                        error: 'User could not be deleted!'
+                    });
+                }
+            );
         }
     );
 };

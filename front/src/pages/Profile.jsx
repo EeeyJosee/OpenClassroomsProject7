@@ -1,12 +1,12 @@
 import Banner from '../components/Banner';
-import '../styles/Profile.css';
+import ProfileInformation from '../components/ProfileInformation';
 
 function Profile() {
 
     return (
         <>
             <Banner />
-            <div className="NaN"> Woo Profile! </div>
+            <ProfileInformation />
         </>
     );
 }
