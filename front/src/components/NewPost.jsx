@@ -9,16 +9,16 @@ function NewPost() {
         e.preventDefault();
         const formData = new FormData();
 
-        formData.append('post', { 'message': setMessage, 'title': setTitle });
-        formData.append('media', setSelectedMedia);
-
-        console.log(formData.entries())
+        formData.append('title', title);
+        formData.append('message', message);
+        formData.append('media', media);
 
         axios
             .post("http://localhost:3000/api/posts", formData, config)
             .then(
                 (response) => {
                     alert("New Post Created!");
+                    window.location.reload();
                 }
             ).catch(
                 (error) => {
@@ -29,7 +29,7 @@ function NewPost() {
     // authentication details for get request
     const auth = JSON.parse(localStorage.getItem('auth')).token;
     const config = {
-        headers: { Authorization: `Bearer ${auth}` }
+        headers: { Authorization: `Bearer ${auth}`, 'content-type': 'multipart/form-data' }
     };
 
     const [title, setTitle] = useState('');
@@ -66,13 +66,14 @@ function NewPost() {
                             onChange={(e) => setMessage(e.target.value)}
                         />
                         <label htmlFor="file"> File Upload </label>
-                        <div className="exp"><input
-                            type="file"
-                            name="file"
-                            id="file"
-                            value={media}
-                            onChange={(e) => setSelectedMedia(e.target.files[0])}
-                        />
+                        <div className="fileSubmitContainer">
+                            <input
+                                type="file"
+                                name="file"
+                                id="file"
+                                value={media}
+                                onChange={(e) => setSelectedMedia(e.target.files[0])}
+                            />
                             <div className="item">
                                 <input type="submit" id="submit" value="Submit" />
                             </div>

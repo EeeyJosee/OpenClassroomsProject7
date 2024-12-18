@@ -27,6 +27,7 @@ a {
 @media (max-width: 739px) {
     .imj-Banner {
         text-align: center;
+        padding-right: 5%;
     }
 
     .jh-logo {

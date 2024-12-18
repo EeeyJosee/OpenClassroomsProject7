@@ -10,15 +10,17 @@ function Banner() {
 
     return (
         <>
-            <nav>
-                {!auth.token && <Link to="/signup">SignUp</Link>}
-                {!auth.token && <Link to="/login">LogIn</Link>}
-                {auth.token && <Link to="/">Home</Link>}
-                {auth.token && <Link to="/profile">Profile</Link>}
-                {auth.token && <Link to="/login" onClick={handleClick}>Sign Out</Link>}
-            </nav>
-            <div className="imj-Banner">
-                <img src={logo} alt='Groupomania Image Banner' className='jh-logo' />
+            <div>
+                <nav>
+                    {!auth.token && <Link to="/signup">SignUp</Link>}
+                    {!auth.token && <Link to="/login">LogIn</Link>}
+                    {auth.token && <Link to="/">Home</Link>}
+                    {auth.token && <Link to="/profile">Profile</Link>}
+                    {auth.token && <Link to="/login" onClick={handleClick}>Sign Out</Link>}
+                </nav>
+                <div className="imj-Banner">
+                    <img src={logo} alt='Groupomania Image Banner' className='jh-logo' />
+                </div>
             </div>
         </>
     )

@@ -26,27 +26,39 @@ function PostDashboard() {
     }, []);
 
     const [posts, setPosts] = useState([]);
+    const [isExpanded, setIsExpanded] = useState(false);
 
     const post = ({ id, message, mediaUrl, title }) =>
         // render appropriate media formats in list
         <li key={id}>
-            <h2 className="postTitle">{title}</h2>
-            <p className="postMessage">{message}</p>
 
-            {mediaUrl?.includes('.png', '.jpg') ?
-                <img className="postMedia" src={mediaUrl} alt={`media for ${title}`} /> : null}
+            <div onClick={() => setIsExpanded(!isExpanded)}>
+                {isExpanded ?
+                    
+                    <h2 className="postTitle">{title}</h2>
+                    :
+                    <>
+                        <h2 className="postTitle">{title}</h2>
+                        <p className="postMessage">{message}</p>
+                        {mediaUrl?.includes('.png', '.jpg') ?
+                            <img className="postMedia" src={mediaUrl} alt={`media for ${title}`} /> : null}
 
-            {mediaUrl?.includes('.mp4') ?
-                <video className="postMedia" controls>
-                    <source src={mediaUrl} type="video/mp4"></source>
-                </video> : null}
+                        {mediaUrl?.includes('.mp4') ?
+                            <video className="postMedia" controls>
+                                <source src={mediaUrl} type="video/mp4"></source>
+                            </video> : null}
 
-            {mediaUrl?.includes('.mp3') ?
-                <audio className="postMedia" controls>
-                    <source src={mediaUrl} type="audio/ogg"></source>
-                    <source src={mediaUrl} type="audio/mpeg"></source>
-                </audio > : null}
-        </li >
+                        {mediaUrl?.includes('.mp3') ?
+                            <audio className="postMedia" controls>
+                                <source src={mediaUrl} type="audio/ogg"></source>
+                                <source src={mediaUrl} type="audio/mpeg"></source>
+                            </audio > : null}
+
+                    </>
+                }
+            </div>
+
+        </li>
 
     return (
         <>

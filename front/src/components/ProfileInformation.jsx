@@ -17,8 +17,8 @@ function ProfileInformation() {
             .delete(`http://localhost:3000/api/auth/delete/${id}`, config)
             .then(
                 response => {
-                    console.log(response);
-                    setTimeout(() => { navigate('/login') }, 1000);
+                    localStorage.clear();
+                    { navigate('/login') };
                 }
             ).catch(
                 (error) => {
