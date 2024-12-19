@@ -1,5 +1,4 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
 import '../styles/ReadPost.css';
 
 function ReadPost(props) {
@@ -15,24 +14,39 @@ function ReadPost(props) {
     };
 
     const handleClick = e => {
-        axios
-            .post(`http://localhost:3000/api/posts/${id}/read`, config)
-            .then(
-                response => {
-                    window.location.reload();
-                }
-            ).catch(
-                (error) => {
-                    console.log(error.response);
-                }
-            );
+        if (read?.includes(UserID)) {
+            console.log('here11')
+            axios
+                .post(`http://localhost:3000/api/posts/${id}/read`, config, 0)
+                .then(
+                    response => {
+                        window.location.reload();
+                    }
+                ).catch(
+                    (error) => {
+                        console.log(error.response);
+                    }
+                );
+        }
+        else {
+            console.log('here22')
+            axios
+                .post(`http://localhost:3000/api/posts/${id}/read`, config, 1)
+                .then(
+                    response => {
+                        window.location.reload();
+                    }
+                ).catch(
+                    (error) => {
+                        console.log(error.response);
+                    }
+                );
+        }
     };
-
-    //  const [posts, setPosts] = useState([]);
 
     return (
         <>
-            {!read?.includes(UserID) ?
+            {read?.includes(UserID) ?
                 <button onClick={handleClick} className="readPostButton">
                     <span className="longText">Read Post</span>
                     <span className="shortText">Read</span>

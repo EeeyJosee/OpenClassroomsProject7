@@ -60,7 +60,7 @@ function PostDashboard() {
                 null
             }
             <div className="postModification">
-                <ReadPost id={id} />
+                <ReadPost id={id} UserID={UserId} read={read} />
                 {UserId === userId ? <DeletePost id={id} /> : null}
             </div>
         </li>

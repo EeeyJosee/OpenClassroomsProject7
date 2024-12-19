@@ -16,6 +16,7 @@
         border-width: 2px;
         border-radius: 3px;
         overflow: hidden;
+        transition: .3s;
     }
 
     button:hover {
@@ -78,6 +79,7 @@
         background-color: white;
         border-radius: 3px;
         border-width: 2px;
+        transition: .3s;
     }
 
     #submit:hover {

@@ -27,7 +27,9 @@ input {
     background-color: white;
     padding: 3px 6px;
     border-radius: 3px;
+    border-width: 2px;
     font-size: 17px;
+    transition: .3s;
 }
 
 #loginButton:hover {

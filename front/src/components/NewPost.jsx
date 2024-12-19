@@ -13,17 +13,22 @@ function NewPost() {
         formData.append('message', message);
         formData.append('media', media);
 
-        axios
-            .post("http://localhost:3000/api/posts", formData, config)
-            .then(
-                (response) => {
-                    alert("New Post Created!");
-                    window.location.reload();
-                }
-            ).catch(
-                (error) => {
-                    alert("Post was not created!");
-                });
+        if (title && message) {
+            axios
+                .post("http://localhost:3000/api/posts", formData, config)
+                .then(
+                    (response) => {
+                        alert("New Post Created!");
+                        window.location.reload();
+                    }
+                ).catch(
+                    (error) => {
+                        alert("Post was not created!");
+                    });
+        }
+        else {
+            alert('A required field is missing!');
+        }
     };
 
     // authentication details for get request
@@ -49,7 +54,7 @@ function NewPost() {
                 <div>
                     <form action="" id="newPost" method="post" onSubmit={submitForm}>
                         <h2> Create Post </h2>
-                        <label htmlFor="title"> Title <span>*</span> </label>
+                        <label htmlFor="title"> Title <span className="requiredField">*</span> </label>
                         <input
                             type="title"
                             name="title"
@@ -57,7 +62,7 @@ function NewPost() {
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                         />
-                        <label htmlFor="message"> Message <span>*</span> </label>
+                        <label htmlFor="message"> Message <span className="requiredField">*</span> </label>
                         <textarea
                             type="message"
                             name="message"
