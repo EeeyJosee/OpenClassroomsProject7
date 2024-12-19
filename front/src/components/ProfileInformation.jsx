@@ -29,7 +29,7 @@ function ProfileInformation() {
 
     return (
         <>
-            <div className="createPostContainer">
+            <div className="createPostContainer deleteProfileButton">
                 <button onClick={handleClick}>Delete Profile</button>
             </div>
         </>

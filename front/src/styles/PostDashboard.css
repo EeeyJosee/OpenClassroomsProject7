@@ -15,6 +15,8 @@ ul {
 }
 
 li {
+    display: flex;
+    flex-direction: column;
     background-color: white;
     list-style-type: none;
     width: 90%;
@@ -24,14 +26,18 @@ li {
     outline: 3.5px outset;
 
     .postTitle {
-        width: 90%;
-        margin: 10px auto;
+        margin: 10px auto 10px 18px;
         font-size: 22px;
+        transition: .2s;
+    }
+    
+    .postTitle:hover {
+        color: #FF2F01;
     }
 
     .postMessage {
         width: 90%;
-        margin: 10px auto 15px;
+        margin: 0px auto 15px;
     }
 
     .postMedia {
@@ -39,4 +45,14 @@ li {
         margin: 0px auto 0px 20%;
         border-radius: 5px;
     }
+
+    .postModification{
+        margin: 0px auto;
+        flex-direction: column;
+        width: 95%;
+    }
+}
+
+.abc {
+    background-color: gray;
 }

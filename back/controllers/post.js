@@ -85,7 +85,7 @@ exports.createPost = (request, response, next) => {
 
 // modify contents of existing post
 exports.modifyPost = (request, response, next) => {
-    Post.findOne({ _id: request.params.id }).then(
+    Post.findOne({ where: { id: request.params.id } }).then(
         (post) => {
             if (!post) {
                 return response.status(404).json({
@@ -99,7 +99,7 @@ exports.modifyPost = (request, response, next) => {
             }
 
             // verify user authorization
-            if (!((post.userId == request.auth.userId) && (post.userId == request.body.userId))) {
+            if (!((post.UserId == request.auth.userId) && (post.UserId == request.body.userId))) {
                 return response.status(401).json({
                     error: 'Request not authorized!'
                 });
@@ -110,23 +110,23 @@ exports.modifyPost = (request, response, next) => {
                     fs.unlink('media/' + filename, () => { })
                     const url = request.protocol + '://' + request.get('host');
                     post = {
-                        id: request.params.id,
+                        UserId: request.params.id,
+                        // id: UserId: request.body.id,
                         message: request.body.message,
                         title: request.body.title,
-                        mediaUrl: url + '/media/' + request.file.filename,
-                        userId: request.body.id
+                        mediaUrl: url + '/media/' + request.file.filename
                     };
 
                 } else {
                     post = {
-                        id: request.params.id,
+                        UserId: request.params.id,
+                        // id: UserId: request.body.id,
                         message: request.body.message,
                         title: request.body.title,
-                        mediaUrl: request.body.mediaUrl,
-                        userId: request.body.id
+                        mediaUrl: request.body.mediaUrl
                     };
                 }
-                Post.updateOne({ _id: request.params.id }, post).then(
+                Post.updateOne({ id: request.params.id }, post).then(
                     () => {
                         response.status(201).json({
                             message: 'Post has been updated!'
@@ -194,4 +194,71 @@ exports.deletePost = (request, response, next) => {
             }
         }
     );
+};
+
+// mark post as read or unread
+exports.readPost = (request, response, next) => {
+    userIdBody = request.body.UserId;
+    userReadBody = request.body.read;
+
+    Post.findOne({ where: { id: request.params.id } }).then(
+        (post) => {
+            if (!post) {
+                return response.status(404).json({
+                    error: 'Post not found!'
+                });
+            }
+            
+            // check who read post
+            read = post.read;
+            switch (userReadBody) {
+                // like the sauce
+                case 1:
+                    if (read.includes(userIdBody)) {
+                        return response.status(401).json({
+                            error: 'Post has already been read!'
+                        });
+                    }
+                    if (!read.includes(userIdBody)) {
+                        read.push(userIdBody);
+                        post.save().then(
+                            () => {
+                                response.status(201).json({
+                                    message: 'Post is now read!'
+                                });
+                            }
+                        ).catch(
+                            (error) => {
+                                response.status(400).json({
+                                    error: 'Post could not be marked read!'
+                                });
+                            }
+                        );
+                    };
+                    break;
+
+                // mark a post as unread
+                case 0:
+                    read.remove(userIdBody);
+                    post.save().then(
+                        () => {
+                            response.status(201).json({
+                                message: 'Post has been marked unread!'
+                            });
+                        }
+                    ).catch(
+                        (error) => {
+                            response.status(400).json({
+                                error: 'Post could not be marked as unread!'
+                            });
+                        }
+                    );
+                    break;
+                default:
+                    return response.status(400).json({
+                        error: '"read" is not of the values 0 or 1!'
+                    });
+            }
+        }
+    )
 };

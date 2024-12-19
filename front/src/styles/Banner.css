@@ -12,6 +12,10 @@ a {
     color: #000000;
 }
 
+a:hover {
+    color: #FF2F01;
+}
+
 .imj-Banner {
     color: black;
     text-align: right;

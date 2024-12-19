@@ -13,7 +13,7 @@
         font-size: 17px;
         font-weight: 500;
         font-family: inherit;
-        border-width: 1px;
+        border-width: 2px;
         border-radius: 3px;
         overflow: hidden;
     }
@@ -66,12 +66,18 @@
         background-color: #FCD7D4;
         padding: 0px;
         width: 100%;
+        font-weight: 700;
         /* color: rgba(0, 0, 0, 0); */
+
+        #file-upload-button {
+            font-weight: 700;
+        }
     }
 
     #submit {
         background-color: white;
         border-radius: 3px;
+        border-width: 2px;
     }
 
     #submit:hover {

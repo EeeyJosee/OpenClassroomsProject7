@@ -1,0 +1,35 @@
+.deletePostButton {
+    padding: 3px;  
+    background-color: white;
+    color: #FF2F01;
+    font-size: 17px;
+    font-weight: 700;
+    font-family: inherit;
+    border: 3px solid #FF2F01;
+    border-radius: 3px;
+    overflow: hidden;
+    margin: 0px 4% 0px 0px;
+    transition: .3s;
+}
+
+.deletePostButton:hover {
+    background-color: #FF2F01;
+    color: white;
+}
+
+.shortText {
+    display: none;
+}
+
+
+@media (max-width: 445px) {
+
+    .shortText {
+        display: contents;
+    }
+
+    .longText {
+        display: none;
+    }
+    
+}

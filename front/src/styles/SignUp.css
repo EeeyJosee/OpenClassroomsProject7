@@ -33,7 +33,7 @@ label {
     background-color: #EFEFEF;
 }
 
-span {
+.requiredField {
     color: #FF2F01;
     font-weight: 700;
 }

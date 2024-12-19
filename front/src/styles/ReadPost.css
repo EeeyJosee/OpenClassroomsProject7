@@ -1,0 +1,45 @@
+.readPostButton {
+    padding: 3px;  
+    background-color: white;
+    color: gray;
+    font-size: 17px;
+    font-weight: 700;
+    font-family: inherit;
+    border: 3px solid gray;
+    border-radius: 3px;
+    overflow: hidden;
+    margin: 0px 4% 5px 0px;
+    transition: .3s;
+}
+
+.readPostButton:hover {
+    color: white;
+    background-color: gray;
+}
+
+.unreadPostButton {
+    color: green;
+    border-color: green;
+}
+
+.unreadPostButton:hover  {
+    color: white;
+    background-color: green;
+}
+
+.shortText {
+    display: none;
+}
+
+
+@media (max-width: 445px) {
+
+    .shortText {
+        display: contents;
+    }
+
+    .longText {
+        display: none;
+    }
+    
+}

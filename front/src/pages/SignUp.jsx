@@ -69,7 +69,7 @@ function SignUp() {
                 <form action="" id="signup" method="post" onSubmit={handleSubmit}>
                     <h1 className="signupTitle">Signup</h1>
                     <p className="item">
-                        <label htmlFor="email"> Email <span>*</span> </label>
+                        <label htmlFor="email"> Email <span className="requiredField">*</span> </label>
                         <input
                             type="email"
                             name="email"
@@ -79,7 +79,7 @@ function SignUp() {
                         />
                     </p>
                     <p className="item">
-                        <label htmlFor="password"> Password <span>*</span> </label>
+                        <label htmlFor="password"> Password <span className="requiredField">*</span> </label>
                         <input
                             type="password"
                             name="password"

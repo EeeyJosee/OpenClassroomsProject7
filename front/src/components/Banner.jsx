@@ -19,7 +19,9 @@ function Banner() {
                     {auth.token && <Link to="/login" onClick={handleClick}>Sign Out</Link>}
                 </nav>
                 <div className="imj-Banner">
-                    <img src={logo} alt='Groupomania Image Banner' className='jh-logo' />
+                    <a href="/">
+                        <img src={logo} alt='Groupomania Image Banner' className='jh-logo' />
+                    </a>
                 </div>
             </div>
         </>
