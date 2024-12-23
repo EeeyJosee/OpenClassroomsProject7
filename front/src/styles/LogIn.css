@@ -34,6 +34,7 @@ input {
 
 #loginButton:hover {
     background-color: #EFEFEF;
+    cursor: pointer;
 }
 
 @media (max-width: 366px) {

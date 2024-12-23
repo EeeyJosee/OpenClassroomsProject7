@@ -21,6 +21,7 @@
 
     button:hover {
         background-color: #EFEFEF;
+        cursor: pointer;
     }
 }
 
@@ -83,5 +84,6 @@
 
     #submit:hover {
         background-color: #EFEFEF;
+        cursor: pointer;
     }
 }

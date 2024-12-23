@@ -33,6 +33,7 @@ label {
 
 #signupButton:hover {
     background-color: #EFEFEF;
+    cursor: pointer;
 }
 
 .requiredField {

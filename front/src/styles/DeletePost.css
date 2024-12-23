@@ -15,6 +15,7 @@
 .deletePostButton:hover {
     background-color: #FF2F01;
     color: white;
+    cursor: pointer;
 }
 
 .shortText {

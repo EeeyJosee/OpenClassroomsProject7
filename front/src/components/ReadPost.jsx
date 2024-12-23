@@ -16,11 +16,6 @@ function ReadPost(props) {
     const handleClick = e => {
         if (read?.includes(authId)) {
             const payload = {UserId: authId, read: 0};
-            console.log(payload)
-
-            const formData = new FormData();
-            formData.append('UserId', authId);
-            formData.append('read', 1);
             axios
                 .post(`http://localhost:3000/api/posts/${id}/read`, payload, config)
                 .then(
@@ -35,7 +30,6 @@ function ReadPost(props) {
         }
         else {
             const payload = {UserId: authId, read: 1};
-            console.log(payload)
             axios
                 .post(`http://localhost:3000/api/posts/${id}/read`, payload, config)
                 .then(
