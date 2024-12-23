@@ -1,4 +1,5 @@
 import axios from "axios";
+import React, { useEffect, useState } from "react";
 import '../styles/ReadPost.css';
 
 function ReadPost(props) {
@@ -7,46 +8,32 @@ function ReadPost(props) {
     const read = props.read;
 
     // authentication details for get request
-    const auth = JSON.parse(localStorage.getItem('auth')).token;
-    const authId = JSON.parse(localStorage.getItem('auth')).userId;
+    const token = JSON.parse(localStorage.getItem('auth')).token;
+    const userId = JSON.parse(localStorage.getItem('auth')).userId;
     const config = {
-        headers: { Authorization: `Bearer ${auth}` }
+        headers: { Authorization: `Bearer ${token}` }
     };
 
+    const [isRead, setIsRead] = useState(read.includes(userId));
+
     const handleClick = e => {
-        if (read?.includes(authId)) {
-            const payload = {UserId: authId, read: 0};
-            axios
-                .post(`http://localhost:3000/api/posts/${id}/read`, payload, config)
-                .then(
-                    response => {
-                        window.location.reload();
-                    }
-                ).catch(
-                    (error) => {
-                        console.log(error.response);
-                    }
-                );
-        }
-        else {
-            const payload = {UserId: authId, read: 1};
-            axios
-                .post(`http://localhost:3000/api/posts/${id}/read`, payload, config)
-                .then(
-                    response => {
-                        window.location.reload();
-                    }
-                ).catch(
-                    (error) => {
-                        console.log(error.response);
-                    }
-                );
-        }
+        const payload = { UserId: userId, read: isRead ? 0 : 1 };
+        axios
+            .post(`http://localhost:3000/api/posts/${id}/read`, payload, config)
+            .then(
+                () => {
+                    setIsRead(!isRead)
+                }
+            ).catch(
+                (error) => {
+                    console.error(error.response);
+                }
+            );
     };
 
     return (
         <>
-            {read?.includes(authId) ?
+            {isRead ?
                 <button onClick={handleClick} className="readPostButton">
                     <span className="longText">Read Post</span>
                     <span className="shortText">Read</span>

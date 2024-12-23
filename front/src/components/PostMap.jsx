@@ -17,7 +17,7 @@ function PostMap(props) {
     const createdAt = (props.createdAt).substring(0,10);
 
     return (
-        <li key={id}>
+        <li key={id} data-key={id}>
             <h2 className="postTitle" onClick={() => setIsExpanded(!isExpanded)} >{title}</h2>
             {isExpanded ?
                 <>

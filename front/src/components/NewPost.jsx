@@ -24,13 +24,14 @@ function NewPost() {
             axios
                 .post("http://localhost:3000/api/posts", formData, config)
                 .then(
-                    (response) => {
+                    () => {
                         alert("New Post Created!");
                         window.location.reload();
                     }
                 ).catch(
                     (error) => {
                         alert("Post was not created!");
+                        console.error(error.response);
                     });
         }
         else {
