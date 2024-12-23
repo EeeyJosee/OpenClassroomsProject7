@@ -4,11 +4,18 @@
         border: 3px solid #FF2F01;
         font-weight: 700;
         transition: .3s;
+        width: 25%;
     }
 
     button:hover {
         background-color: #FF2F01;
         color: white;
     }
+}
 
+.profileIdTitle {
+    font-size: 18px;
+    text-align: center;
+    margin: 2px 0px 5px;
+    padding: 0px;
 }

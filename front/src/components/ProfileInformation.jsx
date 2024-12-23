@@ -29,6 +29,7 @@ function ProfileInformation() {
 
     return (
         <>
+            <h1 className="profileIdTitle">Account ID: {id}</h1>
             <div className="createPostContainer deleteProfileButton">
                 <button onClick={handleClick}>Delete Profile</button>
             </div>

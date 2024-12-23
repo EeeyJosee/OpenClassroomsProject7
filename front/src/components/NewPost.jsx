@@ -5,13 +5,20 @@ import '../styles/NewPost.css';
 function NewPost() {
 
     const submitForm = (e) => {
-        // Prevent the default submit and page reload
+        // prevent the default submit and page reload
         e.preventDefault();
         const formData = new FormData();
 
-        formData.append('title', title);
-        formData.append('message', message);
-        formData.append('media', media);
+        // don't know why this works but it does!!
+        if (media == '') {
+            formData.append('title', title);
+            formData.append('message', message);
+        }
+        else {
+            const payload = { message: message, title: title };
+            formData.append('post', JSON.stringify(payload));
+            formData.append('media', media);
+        }
 
         if (title && message) {
             axios
@@ -76,7 +83,6 @@ function NewPost() {
                                 type="file"
                                 name="file"
                                 id="file"
-                                value={media}
                                 onChange={(e) => setSelectedMedia(e.target.files[0])}
                             />
                             <div className="item">

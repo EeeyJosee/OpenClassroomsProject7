@@ -4,20 +4,25 @@ import '../styles/ReadPost.css';
 function ReadPost(props) {
 
     const id = props.id;
-    const UserID = props.UserId;
     const read = props.read;
 
     // authentication details for get request
     const auth = JSON.parse(localStorage.getItem('auth')).token;
+    const authId = JSON.parse(localStorage.getItem('auth')).userId;
     const config = {
         headers: { Authorization: `Bearer ${auth}` }
     };
 
     const handleClick = e => {
-        if (read?.includes(UserID)) {
-            console.log('here11')
+        if (read?.includes(authId)) {
+            const payload = {UserId: authId, read: 0};
+            console.log(payload)
+
+            const formData = new FormData();
+            formData.append('UserId', authId);
+            formData.append('read', 1);
             axios
-                .post(`http://localhost:3000/api/posts/${id}/read`, config, 0)
+                .post(`http://localhost:3000/api/posts/${id}/read`, payload, config)
                 .then(
                     response => {
                         window.location.reload();
@@ -29,9 +34,10 @@ function ReadPost(props) {
                 );
         }
         else {
-            console.log('here22')
+            const payload = {UserId: authId, read: 1};
+            console.log(payload)
             axios
-                .post(`http://localhost:3000/api/posts/${id}/read`, config, 1)
+                .post(`http://localhost:3000/api/posts/${id}/read`, payload, config)
                 .then(
                     response => {
                         window.location.reload();
@@ -46,7 +52,7 @@ function ReadPost(props) {
 
     return (
         <>
-            {read?.includes(UserID) ?
+            {read?.includes(authId) ?
                 <button onClick={handleClick} className="readPostButton">
                     <span className="longText">Read Post</span>
                     <span className="shortText">Read</span>

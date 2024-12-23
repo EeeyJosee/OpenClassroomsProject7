@@ -208,52 +208,81 @@ exports.readPost = (request, response, next) => {
                     error: 'Post not found!'
                 });
             }
-            
             // check who read post
             read = post.read;
+
             switch (userReadBody) {
-                // like the sauce
-                case 1:
+                case 1: // mark a post as read
                     if (read.includes(userIdBody)) {
-                        return response.status(401).json({
+                        return response.status(400).json({
                             error: 'Post has already been read!'
                         });
                     }
                     if (!read.includes(userIdBody)) {
-                        read.push(userIdBody);
-                        post.save().then(
-                            () => {
-                                response.status(201).json({
-                                    message: 'Post is now read!'
-                                });
-                            }
-                        ).catch(
-                            (error) => {
-                                response.status(400).json({
-                                    error: 'Post could not be marked read!'
-                                });
+                        read = [...read, userIdBody]
+                        post.update({ read }).then(
+                            (post) => {
+                                post.save().then(
+                                    () => {
+                                        response.status(201).json({
+                                            message: 'Post is now read!'
+                                        });
+                                    }
+                                ).catch(
+                                    (error) => {
+                                        response.status(400).json({
+                                            error: 'Post could not be marked read!'
+                                        });
+                                    }
+                                );
                             }
                         );
                     };
                     break;
 
-                // mark a post as unread
-                case 0:
-                    read.remove(userIdBody);
-                    post.save().then(
-                        () => {
-                            response.status(201).json({
-                                message: 'Post has been marked unread!'
-                            });
+                case 0: // mark a post as unread
+                    if (!read.includes(userIdBody)) {
+                        return response.status(400).json({
+                            error: 'Post is already unread!'
+                        });
+                    }
+                    if (read.includes(userIdBody)) {
+                        // splice id from the array
+                        const index = read.indexOf(userIdBody);
+
+                        if (index == 0) {// deletion of first record
+                            const [first, ...second] = read;
+                            read = second;
                         }
-                    ).catch(
-                        (error) => {
-                            response.status(400).json({
-                                error: 'Post could not be marked as unread!'
-                            });
+                        if (read.length == index+1) {// deletion of last record
+                            const first = read.slice(0, index)
+                            read = first;
                         }
-                    );
+                        else {// deletion of a record in the middle
+                            const first = read.slice(0, index);
+                            const second = read.slice(index+1, read.length);
+                            read = [...first, ...second];
+                        }
+                        post.update({ read }).then(
+                            (post) => {
+                                post.save().then(
+                                    () => {
+                                        response.status(201).json({
+                                            message: 'Post has been marked unread!'
+                                        });
+                                    }
+                                ).catch(
+                                    (error) => {
+                                        response.status(400).json({
+                                            error: 'Post could not be marked as unread!'
+                                        });
+                                    }
+                                );
+                            }
+                        );
+                    }
                     break;
+
                 default:
                     return response.status(400).json({
                         error: '"read" is not of the values 0 or 1!'
