@@ -1,14 +1,14 @@
 .deleteProfileButton {
     button {
-        color: #FF2F01;
-        border: 3px solid #FF2F01;
+        color: rgb(255, 47, 1);
+        border: 3px solid rgb(255, 47, 1);
         font-weight: 700;
         transition: .3s;
         width: 25%;
     }
 
     button:hover {
-        background-color: #FF2F01;
+        background-color: rgb(296, 88, 42);
         color: white;
     }
 }

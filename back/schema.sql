@@ -26,15 +26,19 @@ ALTER TABLE IF EXISTS public."Users"
 
 CREATE TABLE IF NOT EXISTS public."Posts"
 (
-    id integer NOT NULL DEFAULT nextval('"Posts_id_seq"'::regclass),
+     id integer NOT NULL DEFAULT nextval('"Posts_id_seq"'::regclass),
     message character varying(255) COLLATE pg_catalog."default",
     "mediaUrl" character varying(255) COLLATE pg_catalog."default",
     title character varying(255) COLLATE pg_catalog."default",
     read integer[],
     "createdAt" timestamp with time zone NOT NULL,
     "updatedAt" timestamp with time zone NOT NULL,
+    "UserId" integer,
     CONSTRAINT "Posts_pkey" PRIMARY KEY (id),
-    CONSTRAINT "Posts_title_key" UNIQUE (title)
+    CONSTRAINT "Posts_UserId_fkey" FOREIGN KEY ("UserId")
+        REFERENCES public."Users" (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE SET NULL
 )
 
 TABLESPACE pg_default;

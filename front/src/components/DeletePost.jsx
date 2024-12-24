@@ -15,13 +15,13 @@ function DeletePost(props) {
         axios
             .delete(`http://localhost:3000/api/posts/${id}`, config)
             .then(
-                response => {
+                () => {
                     alert("Post Deleted!");
                     window.location.reload();
                 }
             ).catch(
                 (error) => {
-                    console.log(error.response);
+                    console.error(error.response);
                 }
             );
     };

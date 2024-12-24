@@ -3,7 +3,7 @@ const fs = require('fs');
 
 // display all posts
 exports.getAllPosts = (request, response, next) => {
-    Post.findAll().then(
+    Post.findAll({ order: [['createdAt', 'DESC']] }).then(
         (posts) => {
             response.status(200).json(posts);
         }
@@ -254,13 +254,13 @@ exports.readPost = (request, response, next) => {
                             const [first, ...second] = read;
                             read = second;
                         }
-                        if (read.length == index+1) {// deletion of last record
+                        if (read.length == index + 1) {// deletion of last record
                             const first = read.slice(0, index)
                             read = first;
                         }
                         else {// deletion of a record in the middle
                             const first = read.slice(0, index);
-                            const second = read.slice(index+1, read.length);
+                            const second = read.slice(index + 1, read.length);
                             read = [...first, ...second];
                         }
                         post.update({ read }).then(

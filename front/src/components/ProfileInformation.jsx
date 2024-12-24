@@ -16,13 +16,13 @@ function ProfileInformation() {
         axios
             .delete(`http://localhost:3000/api/auth/delete/${id}`, config)
             .then(
-                response => {
+                () => {
                     localStorage.clear();
                     { navigate('/login') };
                 }
             ).catch(
                 (error) => {
-                    console.log(error.response);
+                    console.error(error.response);
                 }
             );
     };
