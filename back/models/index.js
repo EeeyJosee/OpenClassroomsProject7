@@ -13,7 +13,7 @@ const password = process.env.DB_PASSWORD;
 const database = process.env.DB_NAME;
 config.port = process.env.DB_PORT;
 config.host = process.env.DB_HOST;
-config.dialect = process.env.DB_DIALECT;
+// config.dialect = process.env.DB_DIALECT;
 
 let sequelize;
 if (config.use_env_variable) {
