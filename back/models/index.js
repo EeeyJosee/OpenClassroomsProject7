@@ -8,19 +8,11 @@ const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 const db = {};
 
-// Read environment variables
-const username = process.env.DB_USERNAME;
-const password = process.env.DB_PASSWORD;
-const database = process.env.DB_NAME;
-config.port = process.env.DB_PORT || 5432;
-config.host = process.env.DB_HOST;
-config.dialect = process.env.DB_DIALECT || 'postgres';
-
 // Sequelize config object
 const config = {
-  host,
-  port,
-  dialect,
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT || 5432,
+  dialect: process.env.DB_DIALECT || 'postgres',
   logging: false, // optional, turn off SQL logs
 };
 
@@ -36,10 +28,16 @@ if (env === 'production') {
 
 // Initialize Sequelize
 let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
+
+if (process.env.DATABASE_URL) {
+  sequelize = new Sequelize(process.env.DATABASE_URL, config);
 } else {
-  sequelize = new Sequelize(database, username, password, config);
+  sequelize = new Sequelize(
+    process.env.DB_NAME,
+    process.env.DB_USERNAME,
+    process.env.DB_PASSWORD,
+    config
+  );
 }
 
 // Sync in development
