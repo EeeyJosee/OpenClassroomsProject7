@@ -13,7 +13,7 @@ function PostDashboard() {
     // get all posts
     useEffect(() => {
         axios
-            .get('http://localhost:3000/api/posts', config)
+            .get(`${process.env.REACT_APP_API_URL}/api/posts`, config)
             .then(
                 response => {
                     setPosts(response.data);

@@ -14,7 +14,7 @@ function LogIn() {
             setErrorMessage('');
 
             axios
-                .post("http://localhost:3000/api/auth/login", { email, password })
+                .post(`${process.env.REACT_APP_API_URL}/api/auth/login`, { email, password })
                 .then(
                     response => {
                         localStorage.setItem("auth", JSON.stringify(response.data));

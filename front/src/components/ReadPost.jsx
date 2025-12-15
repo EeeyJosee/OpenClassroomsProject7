@@ -19,7 +19,7 @@ function ReadPost(props) {
     const handleClick = e => {
         const payload = { UserId: userId, read: isRead ? 0 : 1 };
         axios
-            .post(`http://localhost:3000/api/posts/${id}/read`, payload, config)
+            .post(`${process.env.REACT_APP_API_URL}/api/posts/${id}/read`, payload, config)
             .then(
                 () => {
                     setIsRead(!isRead)

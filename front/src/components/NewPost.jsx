@@ -22,7 +22,7 @@ function NewPost() {
 
         if (title && message) {
             axios
-                .post("http://localhost:3000/api/posts", formData, config)
+                .post(`${process.env.REACT_APP_API_URL}/api/posts`, formData, config)
                 .then(
                     () => {
                         alert("New Post Created!");

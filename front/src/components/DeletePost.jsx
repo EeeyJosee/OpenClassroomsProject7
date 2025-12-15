@@ -13,7 +13,7 @@ function DeletePost(props) {
 
     const handleClick = e => {
         axios
-            .delete(`http://localhost:3000/api/posts/${id}`, config)
+            .delete(`${process.env.REACT_APP_API_URL}/api/posts/${id}`, config)
             .then(
                 () => {
                     alert("Post Deleted!");
