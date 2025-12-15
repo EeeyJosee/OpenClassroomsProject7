@@ -2,19 +2,39 @@
 
 const fs = require('fs');
 const path = require('path');
-const Sequelize = require('sequelize');
+const { Sequelize } = require('sequelize');
 const process = require('process');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
-const config = {};
 const db = {};
+
+// Read environment variables
 const username = process.env.DB_USERNAME;
 const password = process.env.DB_PASSWORD;
 const database = process.env.DB_NAME;
-config.port = process.env.DB_PORT;
+config.port = process.env.DB_PORT || 5432;
 config.host = process.env.DB_HOST;
-// config.dialect = process.env.DB_DIALECT;
+config.dialect = process.env.DB_DIALECT || 'postgres';
 
+// Sequelize config object
+const config = {
+  host,
+  port,
+  dialect,
+  logging: false, // optional, turn off SQL logs
+};
+
+// For Render’s Postgres, add SSL if in production
+if (env === 'production') {
+  config.dialectOptions = {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
+  };
+}
+
+// Initialize Sequelize
 let sequelize;
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
@@ -22,10 +42,12 @@ if (config.use_env_variable) {
   sequelize = new Sequelize(database, username, password, config);
 }
 
+// Sync in development
 if (env === 'development') {
   sequelize.sync({ alter: true});
 }
 
+// Load models
 fs
   .readdirSync(__dirname)
   .filter(file => {
@@ -41,6 +63,7 @@ fs
     db[model.name] = model;
   });
 
+// Apply Associations
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
     db[modelName].associate(db);
