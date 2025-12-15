@@ -1,24 +1,20 @@
 const express = require('express');
-const dotenv = require('dotenv').config();
+const cors = require('cors');
 const postRoutes = require('./routes/post');
 const userRoutes = require('./routes/user');
 const path = require('path');
 
-// grab DB details from .env file
-dotenv;
-
 // start up express
 const app = express();
 
-// create API routes
-app.use(express.json());
+// Allow frontend URL to access the backend
+app.use(cors({
+  origin: 'https://openclassroomsproject7-1.onrender.com',
+  credentials: true,
+}));
 
-app.use((request, response, next) => {
-    response.setHeader('Access-Control-Allow-Origin', '*');
-    response.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-    response.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-    next();
-});
+// For parsing JSON bodies
+app.use(express.json());
 
 // allows images to be uploaded
 app.use('/media', express.static(path.join(__dirname, 'media')));

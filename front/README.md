@@ -3,7 +3,7 @@ Employee Chat Web Application
 This project is a full-stack employee chat web application with user authentication. The frontend is built with React and the backend is a Node.js / Express API with a PostgreSQL database. Users can sign up, log in, and send messages in real time (or via your existing API routes).
 
 Live Demo
-    Frontend: x
+    Frontend: https://openclassroomsproject7-1.onrender.com
     Backend: https://openclassroomsproject7.onrender.com/
 
 The frontend communicates with the backend using the environment variable REACT_APP_API_URL.
