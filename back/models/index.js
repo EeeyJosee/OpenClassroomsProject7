@@ -40,10 +40,10 @@ if (process.env.DATABASE_URL) {
   );
 }
 
-// Sync in development
-if (env === 'development') {
-  sequelize.sync({ alter: true});
-}
+// Sync database tables
+sequelize.sync({ alter: true })
+  .then(() => console.log(`✅ Database synced in ${env} mode`))
+  .catch(err => console.error('❌ Database sync error:', err));
 
 // Load models
 fs

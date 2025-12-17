@@ -17,14 +17,6 @@ function SignUp() {
 
             setErrorMessage('');
 
-console.log("SIGNUP PAYLOAD", {
-  email,
-  password,
-  firstName,
-  lastName
-});
-
-
             axios
                 .post(`${process.env.REACT_APP_API_URL}/api/auth/signup`, { email, password, firstName, lastName })
                 .then(
