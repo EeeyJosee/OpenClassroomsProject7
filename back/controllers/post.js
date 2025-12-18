@@ -32,169 +32,124 @@ exports.getOnePost = (request, response, next) => {
 };
 
 // create a new post with or without media
-exports.createPost = (request, response, next) => {
-    // post created with multimedia
-    if (request.file) {
-        request.body = JSON.parse(request.body.post);
+exports.createPost = async (req, res, next) => {
+  try {
+    let mediaUrls = {};
 
-        const url = request.protocol + '://' + request.get('host');
-        const post = new Post({
-            message: request.body.message,
-            mediaUrl: url + '/media/' + request.file.filename,
-            title: request.body.title,
-            read: [],
-            UserId: request.auth.userId
-        });
-        post.save().then(
-            () => {
-                response.status(201).json({
-                    message: 'New post created!'
-                });
-            }
-        ).catch(
-            (error) => {
-                response.status(400).json({
-                    error: 'Post was not created!'
-                });
-            }
-        );
+    if (req.files) {
+      const url = req.protocol + '://' + req.get('host');
+
+      if (req.files.image && req.files.image[0]) {
+        mediaUrls.image = url + '/media/' + req.files.image[0].filename;
+      }
+      if (req.files.audio && req.files.audio[0]) {
+        mediaUrls.audio = url + '/media/' + req.files.audio[0].filename;
+      }
+      if (req.files.video && req.files.video[0]) {
+        mediaUrls.video = url + '/media/' + req.files.video[0].filename;
+      }
     }
-    // post created without multimedia
-    else {
-        const post = new Post({
-            message: request.body.message,
-            title: request.body.title,
-            read: [],
-            UserId: request.auth.userId
-        });
-        post.save().then(
-            () => {
-                response.status(201).json({
-                    message: 'New post created!'
-                });
-            }
-        ).catch(
-            (error) => {
-                response.status(400).json({
-                    error: 'Post was not created!'
-                });
-            }
-        );
+
+    // Parse other fields if multipart/form-data
+    if (req.body.post) {
+      req.body = JSON.parse(req.body.post);
     }
+
+    const post = await Post.create({
+      message: req.body.message,
+      title: req.body.title,
+      read: [],
+      UserId: req.auth.userId,
+      ...mediaUrls, // spread media URLs into the post
+    });
+
+    res.status(201).json({ message: 'New post created!' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Post was not created!' });
+  }
 };
 
 // modify contents of existing post
-exports.modifyPost = (request, response, next) => {
-    Post.findOne({ where: { id: request.params.id } }).then(
-        (post) => {
-            if (!post) {
-                return response.status(404).json({
-                    error: 'Post not found!'
-                });
-            }
+exports.modifyPost = async (req, res) => {
+  try {
+    const post = await Post.findOne({ where: { id: req.params.id } });
 
-            // parse media before validating user
-            if (request.file) {
-                request.body = JSON.parse(request.body.post);
-            }
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found!' });
+    }
 
-            // verify user authorization
-            if (!((post.UserId == request.auth.userId) && (post.UserId == request.body.userId))) {
-                return response.status(401).json({
-                    error: 'Request not authorized!'
-                });
-            }
-            else {
-                if (request.file) {
-                    const filename = post.mediaUrl.split('/media/')[1];
-                    fs.unlink('media/' + filename, () => { })
-                    const url = request.protocol + '://' + request.get('host');
-                    post = {
-                        UserId: request.params.id,
-                        // id: UserId: request.body.id,
-                        message: request.body.message,
-                        title: request.body.title,
-                        mediaUrl: url + '/media/' + request.file.filename
-                    };
+    if (post.UserId !== req.auth.userId) {
+      return res.status(401).json({ error: 'Request not authorized!' });
+    }
 
-                } else {
-                    post = {
-                        UserId: request.params.id,
-                        // id: UserId: request.body.id,
-                        message: request.body.message,
-                        title: request.body.title,
-                        mediaUrl: request.body.mediaUrl
-                    };
-                }
-                Post.updateOne({ id: request.params.id }, post).then(
-                    () => {
-                        response.status(201).json({
-                            message: 'Post has been updated!'
-                        });
-                    }
-                ).catch(
-                    (error) => {
-                        response.status(400).json({
-                            error: 'Post was not updated!'
-                        });
-                    }
-                );
-            }
+    // Parse JSON body if multipart
+    if (req.body.post) {
+      req.body = JSON.parse(req.body.post);
+    }
+
+    const updates = {
+      message: req.body.message ?? post.message,
+      title: req.body.title ?? post.title,
+    };
+
+    const url = req.protocol + '://' + req.get('host');
+
+    // Handle media replacement
+    if (req.files) {
+      ['image', 'audio', 'video'].forEach(type => {
+        if (req.files[type]) {
+          // delete old file if exists
+          if (post[type]) {
+            const filename = post[type].split('/media/')[1];
+            fs.unlink(`media/${filename}`, () => {});
+          }
+
+          updates[type] = url + '/media/' + req.files[type][0].filename;
         }
-    )
+      });
+    }
+
+    await Post.update(updates, { where: { id: req.params.id } });
+
+    res.status(200).json({ message: 'Post updated!' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Post was not updated!' });
+  }
 };
+
 
 // delete an existing post
-exports.deletePost = (request, response, next) => {
-    Post.findOne({ where: { id: request.params.id } }).then(
-        (post) => {
-            if (!post) {
-                return response.status(404).json({
-                    error: 'Post not found!'
-                });
-            }
-            if (post.UserId !== request.auth.userId) {
-                return response.status(401).json({
-                    error: 'Request not authorized!'
-                });
-            }
+exports.deletePost = async (req, res) => {
+  try {
+    const post = await Post.findOne({ where: { id: req.params.id } });
 
-            if (post.mediaUrl) {
-                const filename = post.mediaUrl.split('/media/')[1];
-                fs.unlink('media/' + filename, () => {
-                    Post.destroy({ where: { id: request.params.id } }).then(
-                        () => {
-                            response.status(200).json({
-                                message: 'Deleted!'
-                            });
-                        }
-                    ).catch(
-                        (error) => {
-                            response.status(400).json({
-                                error: 'Post could not be deleted!'
-                            });
-                        }
-                    );
-                })
-            }
-            else {
-                Post.destroy({ where: { id: request.params.id } }).then(
-                    () => {
-                        response.status(200).json({
-                            message: 'Deleted!'
-                        });
-                    }
-                ).catch(
-                    (error) => {
-                        response.status(400).json({
-                            error: 'Post could not be deleted!'
-                        });
-                    }
-                );
-            }
-        }
-    );
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found!' });
+    }
+
+    if (post.UserId !== req.auth.userId) {
+      return res.status(401).json({ error: 'Request not authorized!' });
+    }
+
+    // Delete associated media files if they exist
+    ['image', 'audio', 'video'].forEach(type => {
+      if (post[type]) {
+        const filename = post[type].split('/media/')[1];
+        fs.unlink(`media/${filename}`, () => {});
+      }
+    });
+
+    await Post.destroy({ where: { id: req.params.id } });
+
+    res.status(200).json({ message: 'Post deleted!' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Post could not be deleted!' });
+  }
 };
+
 
 // mark post as read or unread
 exports.readPost = (request, response, next) => {
