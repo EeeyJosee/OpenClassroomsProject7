@@ -1,45 +1,36 @@
-import axios from "axios";
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import Banner from '../components/Banner';
+import api from '../api/axios';
 import '../styles/LogIn.css';
 
 function LogIn() {
-
-    const handleSubmit = e => {
-        // Prevent the default submit and page reload
-        e.preventDefault();
-        
-        if (reEmail.test(email) && rePassword.test(password)) {
-            setErrorMessage('');
-
-            axios
-                .post(`${process.env.REACT_APP_API_URL}/api/auth/login`, { email, password })
-                .then(
-                    response => {
-                        localStorage.setItem("auth", JSON.stringify(response.data));
-                        navigate('..');
-                    }
-                ).catch(
-                    (error) => {
-                        setErrorMessage('❌ Email/Password are invalid!');
-                        setTimeout(() => { setErrorMessage('') }, 3000);
-                    }
-                );
-
-        } else {
-            setErrorMessage('❌ Email/Password are invalid!');
-            setTimeout(() => { setErrorMessage('') }, 3000);
-        }
-    }
-
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [errorMessage, setErrorMessage] = React.useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
-    const navigate = useNavigate();
-    const reEmail = new RegExp(/([a-zA-Z0-9]+@[a-zA-Z]+\.[a-zA-Z]{2,3})/);
-    const rePassword = new RegExp(/([a-zA-Z0-9])/);
+    const reEmail = /^[a-zA-Z0-9]+@[a-zA-Z]+\.[a-zA-Z]{2,3}$/;
+    const rePassword = /^[a-zA-Z0-9]+$/;
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!reEmail.test(email) || !rePassword.test(password)) {
+            setErrorMessage('❌ Email/Password are invalid!');
+            setTimeout(() => setErrorMessage(''), 3000);
+            return;
+        }
+
+        try {
+            const response = await api.post('/api/auth/login', { email, password });
+            localStorage.setItem("auth", JSON.stringify(response.data));
+            navigate('..');
+        } catch (err) {
+            setErrorMessage('❌ Email/Password are invalid!');
+            setTimeout(() => setErrorMessage(''), 3000);
+        }
+    };
 
     return (
         <>

@@ -7,7 +7,7 @@ function ProfileInformation() {
     // authentication details for get request
     const auth = JSON.parse(localStorage.getItem('auth')).token;
     const config = {
-        headers: { Authorization: `Bearer ${auth}` }
+        headers: { Authorization: `Bearer ${auth}`, withCredentials: true }
     };
     const id = JSON.parse(localStorage.getItem('auth')).userId;
     const navigate = useNavigate();

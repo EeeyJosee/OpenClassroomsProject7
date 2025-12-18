@@ -29,9 +29,11 @@ if (env === 'production') {
 // Initialize Sequelize
 let sequelize;
 
-if (process.env.DATABASE_URL) {
+if (process.env.NODE_ENV === 'production' && process.env.DATABASE_URL) {
+  // Production (Render)
   sequelize = new Sequelize(process.env.DATABASE_URL, config);
 } else {
+  // Local development
   sequelize = new Sequelize(
     process.env.DB_NAME,
     process.env.DB_USERNAME,
@@ -41,9 +43,11 @@ if (process.env.DATABASE_URL) {
 }
 
 // Sync database tables
-sequelize.sync({ alter: true })
-  .then(() => console.log(`✅ Database synced in ${env} mode`))
-  .catch(err => console.error('❌ Database sync error:', err));
+if (env !== 'production') {
+  sequelize.sync({ alter: true })
+    .then(() => console.log(`✅ Database synced in ${env} mode`))
+    .catch(err => console.error('❌ Database sync error:', err));
+}
 
 // Load models
 fs

@@ -8,7 +8,7 @@ function DeletePost(props) {
     // authentication details for get request
     const auth = JSON.parse(localStorage.getItem('auth')).token;
     const config = {
-        headers: { Authorization: `Bearer ${auth}` }
+        headers: { Authorization: `Bearer ${auth}`, withCredentials: true }
     };
 
     const handleClick = e => {

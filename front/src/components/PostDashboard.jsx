@@ -7,7 +7,7 @@ function PostDashboard() {
     // authentication details for get request
     const auth = JSON.parse(localStorage.getItem('auth')).token;
     const config = {
-        headers: { Authorization: `Bearer ${auth}` }
+        headers: { Authorization: `Bearer ${auth}`, withCredentials: true }
     };
 
     // get all posts

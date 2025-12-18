@@ -42,7 +42,7 @@ function NewPost() {
     // authentication details for get request
     const auth = JSON.parse(localStorage.getItem('auth')).token;
     const config = {
-        headers: { Authorization: `Bearer ${auth}`, 'content-type': 'multipart/form-data' }
+        headers: { Authorization: `Bearer ${auth}`, 'content-type': 'multipart/form-data', withCredentials: true }
     };
 
     const [title, setTitle] = useState('');

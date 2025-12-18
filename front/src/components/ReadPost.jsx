@@ -1,4 +1,5 @@
 import axios from "axios";
+import api from '../api/axios';
 import React, { useState } from "react";
 import '../styles/ReadPost.css';
 
@@ -11,7 +12,7 @@ function ReadPost(props) {
     const token = JSON.parse(localStorage.getItem('auth')).token;
     const userId = JSON.parse(localStorage.getItem('auth')).userId;
     const config = {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}`, withCredentials: true, withCredentials: true }
     };
 
     const [isRead, setIsRead] = useState(read.includes(userId));
