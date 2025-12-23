@@ -16,8 +16,9 @@ function SignUp() {
             && (reName.test(lastName) || lastName === '')) {
 
             setErrorMessage('');
+
             axios
-                .post("http://localhost:3000/api/auth/signup", { email, password, firstName, lastName })
+                .post(`${process.env.REACT_APP_API_URL}/api/auth/signup`, { email, password, firstName, lastName }, { withCredentials: true })
                 .then(
                     response => {
                         setErrorMessage("✅ Account created! Now redirecting...");

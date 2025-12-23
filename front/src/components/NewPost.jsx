@@ -22,7 +22,7 @@ function NewPost() {
 
         if (title && message) {
             axios
-                .post("http://localhost:3000/api/posts", formData, config)
+                .post(`${process.env.REACT_APP_API_URL}/api/posts`, formData, config)
                 .then(
                     () => {
                         alert("New Post Created!");
@@ -42,7 +42,7 @@ function NewPost() {
     // authentication details for get request
     const auth = JSON.parse(localStorage.getItem('auth')).token;
     const config = {
-        headers: { Authorization: `Bearer ${auth}`, 'content-type': 'multipart/form-data' }
+        headers: { Authorization: `Bearer ${auth}`, 'content-type': 'multipart/form-data', withCredentials: true }
     };
 
     const [title, setTitle] = useState('');

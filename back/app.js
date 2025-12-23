@@ -1,30 +1,46 @@
 const express = require('express');
-const dotenv = require('dotenv').config();
+const cors = require('cors');
 const postRoutes = require('./routes/post');
 const userRoutes = require('./routes/user');
 const path = require('path');
+const fs = require('fs');
+const dotenv = require('dotenv');
 
-// grab DB details from .env file
-dotenv;
-
-// start up express
-const app = express();
-
-// create API routes
-app.use(express.json());
-
-app.use((request, response, next) => {
-    response.setHeader('Access-Control-Allow-Origin', '*');
-    response.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-    response.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-    next();
+dotenv.config({
+  path: `.env.${process.env.NODE_ENV || 'development'}`
 });
 
-// allows images to be uploaded
+// Creating the Multer container for Render
+const mediaPath = path.join(__dirname, 'media');
+if (!fs.existsSync(mediaPath)) {
+  fs.mkdirSync(mediaPath);
+}
+
+// Start up express
+const app = express();
+
+// Determine allowed origin based on environment
+const allowedOrigin = process.env.NODE_ENV === 'production'
+  ? 'https://openclassroomsproject7-1.onrender.com' // your production frontend
+  : 'http://localhost:3001'; // your local frontend
+
+// Enable CORS
+app.use(cors({
+  origin: allowedOrigin,
+  credentials: true,
+}));
+
+// Handle preflight requests for all routes
+app.options('*', cors({ origin: allowedOrigin, credentials: true }));
+
+// For parsing JSON bodies
+app.use(express.json());
+
+// Serve uploaded media
 app.use('/media', express.static(path.join(__dirname, 'media')));
-// user route
+
+// Routes
 app.use('/api/auth', userRoutes);
-// post route
 app.use('/api/posts', postRoutes);
 
 module.exports = app;

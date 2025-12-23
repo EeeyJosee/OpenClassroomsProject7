@@ -8,12 +8,12 @@ function DeletePost(props) {
     // authentication details for get request
     const auth = JSON.parse(localStorage.getItem('auth')).token;
     const config = {
-        headers: { Authorization: `Bearer ${auth}` }
+        headers: { Authorization: `Bearer ${auth}`, withCredentials: true }
     };
 
     const handleClick = e => {
         axios
-            .delete(`http://localhost:3000/api/posts/${id}`, config)
+            .delete(`${process.env.REACT_APP_API_URL}/api/posts/${id}`, config)
             .then(
                 () => {
                     alert("Post Deleted!");

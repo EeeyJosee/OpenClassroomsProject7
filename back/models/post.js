@@ -3,25 +3,48 @@ const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class Post extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-
     static associate(models) {
-      // define association here
       this.belongsTo(models.User);
     }
   }
-  Post.init({
-    message: DataTypes.STRING,
-    mediaUrl: DataTypes.STRING,
-    title: DataTypes.STRING,
-    read: DataTypes.ARRAY(DataTypes.INTEGER)
-  }, {
-    sequelize,
-    modelName: 'Post',
-  });
+
+  Post.init(
+    {
+      message: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+
+      title: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+
+      image: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+
+      audio: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+
+      video: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+
+      read: {
+        type: DataTypes.ARRAY(DataTypes.INTEGER),
+        defaultValue: [],
+      },
+    },
+    {
+      sequelize,
+      modelName: 'Post',
+    }
+  );
+
   return Post;
 };

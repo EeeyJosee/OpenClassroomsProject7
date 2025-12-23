@@ -7,14 +7,14 @@ function ProfileInformation() {
     // authentication details for get request
     const auth = JSON.parse(localStorage.getItem('auth')).token;
     const config = {
-        headers: { Authorization: `Bearer ${auth}` }
+        headers: { Authorization: `Bearer ${auth}`, withCredentials: true }
     };
     const id = JSON.parse(localStorage.getItem('auth')).userId;
     const navigate = useNavigate();
 
     const handleClick = e => {
         axios
-            .delete(`http://localhost:3000/api/auth/delete/${id}`, config)
+            .delete(`${process.env.REACT_APP_API_URL}/api/auth/delete/${id}`, config)
             .then(
                 () => {
                     localStorage.clear();
