@@ -20,19 +20,9 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
 
-      image: {
+      media: {
         type: DataTypes.STRING,
-        allowNull: true,
-      },
-
-      audio: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-
-      video: {
-        type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: true
       },
 
       read: {

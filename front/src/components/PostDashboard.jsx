@@ -28,13 +28,13 @@ function PostDashboard() {
     const [posts, setPosts] = useState([]);
 
     // call the mapping we'll use for each individual post
-    const post = ({ id, message, mediaUrl, title, UserId, read, createdAt }) =>
+    const post = ({ id, message, media, title, UserId, read, createdAt }) =>
         <PostMap
             id={id} 
             UserId={UserId}
             read={read}
             message={message}
-            mediaUrl={mediaUrl}
+            media={media}
             title={title}
             createdAt={createdAt} />
 

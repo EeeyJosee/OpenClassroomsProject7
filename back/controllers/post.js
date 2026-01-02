@@ -32,35 +32,25 @@ exports.getOnePost = (request, response, next) => {
 };
 
 // create a new post with or without media
-exports.createPost = async (req, res, next) => {
+exports.createPost = async (req, res) => {
   try {
-    let mediaUrls = {};
-
-    if (req.files) {
-      const url = req.protocol + '://' + req.get('host');
-
-      if (req.files.image && req.files.image[0]) {
-        mediaUrls.image = url + '/media/' + req.files.image[0].filename;
-      }
-      if (req.files.audio && req.files.audio[0]) {
-        mediaUrls.audio = url + '/media/' + req.files.audio[0].filename;
-      }
-      if (req.files.video && req.files.video[0]) {
-        mediaUrls.video = url + '/media/' + req.files.video[0].filename;
-      }
-    }
-
-    // Parse other fields if multipart/form-data
     if (req.body.post) {
       req.body = JSON.parse(req.body.post);
     }
 
-    const post = await Post.create({
-      message: req.body.message,
+    let media = null;
+
+    if (req.file) {
+      const url = req.protocol + '://' + req.get('host');
+      media = `${url}/media/${req.file.filename}`;
+    }
+
+    await Post.create({
       title: req.body.title,
+      message: req.body.message,
+      media: media,
       read: [],
-      UserId: req.auth.userId,
-      ...mediaUrls, // spread media URLs into the post
+      UserId: req.auth.userId
     });
 
     res.status(201).json({ message: 'New post created!' });
@@ -83,34 +73,27 @@ exports.modifyPost = async (req, res) => {
       return res.status(401).json({ error: 'Request not authorized!' });
     }
 
-    // Parse JSON body if multipart
     if (req.body.post) {
       req.body = JSON.parse(req.body.post);
     }
 
     const updates = {
-      message: req.body.message ?? post.message,
       title: req.body.title ?? post.title,
+      message: req.body.message ?? post.message,
     };
 
-    const url = req.protocol + '://' + req.get('host');
+    // Replace media if a new one is uploaded
+    if (req.file) {
+      if (post.media) {
+        const filename = post.media.split('/media/')[1];
+        fs.unlink(`media/${filename}`, () => {});
+      }
 
-    // Handle media replacement
-    if (req.files) {
-      ['image', 'audio', 'video'].forEach(type => {
-        if (req.files[type]) {
-          // delete old file if exists
-          if (post[type]) {
-            const filename = post[type].split('/media/')[1];
-            fs.unlink(`media/${filename}`, () => {});
-          }
-
-          updates[type] = url + '/media/' + req.files[type][0].filename;
-        }
-      });
+      const url = req.protocol + '://' + req.get('host');
+      updates.media = `${url}/media/${req.file.filename}`;
     }
 
-    await Post.update(updates, { where: { id: req.params.id } });
+    await post.update(updates);
 
     res.status(200).json({ message: 'Post updated!' });
   } catch (error) {
@@ -133,15 +116,12 @@ exports.deletePost = async (req, res) => {
       return res.status(401).json({ error: 'Request not authorized!' });
     }
 
-    // Delete associated media files if they exist
-    ['image', 'audio', 'video'].forEach(type => {
-      if (post[type]) {
-        const filename = post[type].split('/media/')[1];
-        fs.unlink(`media/${filename}`, () => {});
-      }
-    });
+    if (post.media) {
+      const filename = post.media.split('/media/')[1];
+      fs.unlink(`media/${filename}`, () => {});
+    }
 
-    await Post.destroy({ where: { id: req.params.id } });
+    await post.destroy();
 
     res.status(200).json({ message: 'Post deleted!' });
   } catch (error) {

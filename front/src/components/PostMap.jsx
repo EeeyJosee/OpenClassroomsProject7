@@ -10,7 +10,7 @@ function PostMap(props) {
     const [isExpanded, setIsExpanded] = useState(false);
     const id = props.id;
     const message = props.message;
-    const mediaUrl = props.mediaUrl;
+    const media = props.media;
     const title = props.title;
     const UserId = props.UserId;
     const read = props.read;
@@ -27,18 +27,18 @@ function PostMap(props) {
                     <p className="postMessage">{message}</p>
 
                     {/* render appropriate media formats in list */}
-                    {mediaUrl?.includes('.png', '.jpg') ?
-                        <img className="postMedia" src={mediaUrl} alt={`media for ${title}`} /> : null}
+                    {media?.includes('.png', '.jpg') ?
+                        <img className="postMedia" src={media} alt={`media for ${title}`} /> : null}
 
-                    {mediaUrl?.includes('.mp4') ?
+                    {media?.includes('.mp4') ?
                         <video className="postMedia" controls>
-                            <source src={mediaUrl} type="video/mp4"></source>
+                            <source src={media} type="video/mp4"></source>
                         </video> : null}
 
-                    {mediaUrl?.includes('.mp3') ?
+                    {media?.includes('.mp3') ?
                         <audio className="postMedia" controls>
-                            <source src={mediaUrl} type="audio/ogg"></source>
-                            <source src={mediaUrl} type="audio/mpeg"></source>
+                            <source src={media} type="audio/ogg"></source>
+                            <source src={media} type="audio/mpeg"></source>
                         </audio > : null}
                 </>
                 :

@@ -7,43 +7,36 @@ function NewPost() {
     const submitForm = (e) => {
         // prevent the default submit and page reload
         e.preventDefault();
-        const formData = new FormData();
 
-        // don't know why this works but it does!!
-        if (media == '') {
-            formData.append('title', title);
-            formData.append('message', message);
-        }
-        else {
-            const payload = { message: message, title: title };
-            formData.append('post', JSON.stringify(payload));
-            formData.append('media', media);
-        }
-
-        if (title && message) {
-            axios
-                .post(`${process.env.REACT_APP_API_URL}/api/posts`, formData, config)
-                .then(
-                    () => {
-                        alert("New Post Created!");
-                        window.location.reload();
-                    }
-                ).catch(
-                    (error) => {
-                        alert("Post was not created!");
-                        console.error(error.response);
-                    });
-        }
-        else {
+        if (!title || !message) {
             alert('A required field is missing!');
+            return;
         }
+
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('message', message);
+        if (media) formData.append('media', media);
+        
+        axios
+            .post(`${process.env.REACT_APP_API_URL}/api/posts`, formData, config)
+            .then(
+                () => {
+                    alert("New Post Created!");
+                    window.location.reload();
+                })
+                .catch((error) => {
+                    alert("Post was not created!");
+                    console.error(error.response);
+                });
     };
 
     // authentication details for get request
     const auth = JSON.parse(localStorage.getItem('auth')).token;
     const config = {
-        headers: { Authorization: `Bearer ${auth}`, 'content-type': 'multipart/form-data', withCredentials: true }
-    };
+        headers: { Authorization: `Bearer ${auth}` },
+            withCredentials: true,
+        };
 
     const [title, setTitle] = useState('');
     const [message, setMessage] = useState('');

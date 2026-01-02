@@ -6,7 +6,8 @@ const MIME_TYPES = {
     'image/jpeg': 'jpg',
     'image/png': 'png',
     'audio/mpeg': 'mp3',
-    'video/mp4': 'mp4'
+    'video/mp4': 'mp4',
+    'video/webm': 'webm'
 };
 
 // Storage config
@@ -22,9 +23,4 @@ const storage = multer.diskStorage({
 });
 
 // Export middleware
-// Accept multiple fields: 'image' and 'audio'
-module.exports = multer({ storage }).fields([
-  { name: 'image', maxCount: 1 },
-  { name: 'audio', maxCount: 1 },
-  { name: 'video', maxCount: 1 }
-]);
+module.exports = multer({ storage }).single('media');
