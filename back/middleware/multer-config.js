@@ -5,6 +5,8 @@ const MIME_TYPES = {
     'image/jpg': 'jpg',
     'image/jpeg': 'jpg',
     'image/png': 'png',
+    'image/heic': 'heic',
+    'image/heif': 'heif',
     'audio/mpeg': 'mp3',
     'video/mp4': 'mp4',
     'video/webm': 'webm'
